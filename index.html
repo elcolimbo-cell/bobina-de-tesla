@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Bobina de Tesla – Col·legi Sant Francesc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05050F;
+      --bg2: #0C0C20;
+      --purple: #9333EA;
+      --purple-glow: #A855F7;
+      --yellow: #EAB308;
+      --yellow-glow: #FDE047;
+      --copper: #CD7F32;
+      --text: #E2E8F0;
+      --muted: #94A3B8;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(147,51,234,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── CANVAS ─── */
+    #sparks-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(5,5,15,0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(147,51,234,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--purple-glow);
+      letter-spacing: 0.05em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--yellow-glow); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(234,179,8,0.1);
+      border: 1px solid rgba(234,179,8,0.3);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge::before { content: "⚡"; }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    h1 .line1 {
+      display: block;
+      color: #fff;
+    }
+
+    h1 .line2 {
+      display: block;
+      background: linear-gradient(135deg, var(--purple) 0%, var(--yellow) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(147,51,234,0.5));
+    }
+
+    .hero-subtitle {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .hero-authors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .author-chip {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      color: var(--purple-glow);
+      letter-spacing: 0.03em;
+    }
+
+    .scroll-hint {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-hint span { font-size: 1.4rem; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ─── COIL SVG ─── */
+    .coil-wrap {
+      position: relative;
+      margin-top: 3rem;
+      width: 200px;
+      height: 200px;
+    }
+
+    .coil-glow {
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(147,51,234,0.25) 0%, transparent 70%);
+      animation: pulse-glow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .coil-svg { width: 200px; height: 200px; position: relative; z-index: 1; }
+
+    /* ─── SECTIONS ─── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--yellow));
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    /* ─── WHAT IS ─── */
+    #que-es {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .que-es-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .fact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .fact-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .fact-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-3px);
+    }
+
+    .fact-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+
+    .fact-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.25rem;
+    }
+
+    .fact-value {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ─── EXPERIMENTS ─── */
+    #experiments { padding-top: 0; }
+
+    .exp-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .exp-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .exp-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--purple);
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(147,51,234,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .exp-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: rgba(147,51,234,0.12);
+      line-height: 1;
+      margin-bottom: -0.5rem;
+    }
+
+    .exp-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+
+    .tag-purple { background: rgba(147,51,234,0.2); color: var(--purple-glow); }
+    .tag-yellow { background: rgba(234,179,8,0.15); color: var(--yellow-glow); }
+
+    .exp-desc {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .exp-material h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.75rem;
+    }
+
+    .material-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .material-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .material-list li::before {
+      content: "⚡";
+      font-size: 0.75rem;
+      color: var(--purple-glow);
+      flex-shrink: 0;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    #com-funciona {
+      background: linear-gradient(180deg, transparent, rgba(147,51,234,0.05), transparent);
+      border-radius: 32px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .step:hover { border-color: var(--yellow); }
+
+    .step-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--yellow);
+      margin-bottom: 1rem;
+    }
+
+    .step-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    .step-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .step-text {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── TEAM ─── */
+    #equip {
+      text-align: center;
+    }
+
+    .team-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .team-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      min-width: 180px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .team-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-4px);
+    }
+
+    .team-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--yellow));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #fff;
+      margin: 0 auto 0.75rem;
+    }
+
+    .team-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .team-role {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(147,51,234,0.15);
+    }
+
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--purple), var(--yellow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      #que-es { grid-template-columns: 1fr; gap: 2rem; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .fact-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="sparks-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">⚡ Bobina de Tesla</span>
+  <ul>
+    <li><a href="#que-es">Què és</a></li>
+    <li><a href="#experiments">Experiments</a></li>
+    <li><a href="#com-funciona">Com funciona</a></li>
+    <li><a href="#equip">L'equip</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">Col·legi Sant Francesc · Treball Científic</div>
+  <h1>
+    <span class="line1">La Bobina</span>
+    <span class="line2">de Tesla</span>
+  </h1>
+  <p class="hero-subtitle">
+    Un generador electromagnètic que ionitza l'aire, encén bombetes sense cables i fins i tot fa música amb llamps. Ciència pura.
+  </p>
+  <div class="hero-authors">
+    <span class="author-chip">Lucas Jornet</span>
+    <span class="author-chip">Sara Gómez</span>
+    <span class="author-chip">Ferran Colomer</span>
+    <span class="author-chip">Aitana Ruiz</span>
+  </div>
+
+  <!-- Animated Tesla Coil SVG -->
+  <div class="coil-wrap">
+    <div class="coil-glow"></div>
+    <svg class="coil-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Base plate -->
+      <rect x="50" y="160" width="100" height="12" rx="4" fill="#1E1040" stroke="#9333EA" stroke-width="1.5"/>
+      <!-- Coil body -->
+      <rect x="85" y="95" width="30" height="68" rx="4" fill="#0C0C20" stroke="#CD7F32" stroke-width="1.5"/>
+      <!-- Coil windings -->
+      <g stroke="#CD7F32" stroke-width="1.2" opacity="0.7">
+        <line x1="85" y1="103" x2="115" y2="103"/>
+        <line x1="85" y1="110" x2="115" y2="110"/>
+        <line x1="85" y1="117" x2="115" y2="117"/>
+        <line x1="85" y1="124" x2="115" y2="124"/>
+        <line x1="85" y1="131" x2="115" y2="131"/>
+        <line x1="85" y1="138" x2="115" y2="138"/>
+        <line x1="85" y1="145" x2="115" y2="145"/>
+        <line x1="85" y1="152" x2="115" y2="152"/>
+      </g>
+      <!-- Top toroid -->
+      <ellipse cx="100" cy="90" rx="38" ry="14" fill="#1A0A40" stroke="#9333EA" stroke-width="2"/>
+      <ellipse cx="100" cy="87" rx="24" ry="8" fill="#0A0520" stroke="#A855F7" stroke-width="1"/>
+      <!-- Animated lightning bolts -->
+      <g class="lightning-group">
+        <polyline points="100,73 88,55 95,52 82,35" stroke="#EAB308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+          <animate attributeName="opacity" values="0;1;0;0;0" dur="2.5s" repeatCount="indefinite" begin="0s"/>
+        </polyline>
+        <polyline points="100,73 115,50 108,47 122,30" stroke="#A855F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.4s"/>
+        </polyline>
+        <polyline points="100,73 70,58 75,52 62,38" stroke="#EAB308" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+          <animate attributeName="opacity" values="0;0;1;0;0" dur="3s" repeatCount="indefinite" begin="1s"/>
+        </polyline>
+        <polyline points="100,73 130,60 126,55 140,42" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0">
+          <animate attributeName="opacity" values="0;0;0;0;1;0" dur="2.8s" repeatCount="indefinite" begin="0.8s"/>
+        </polyline>
+      </g>
+      <!-- Glow ring under toroid -->
+      <ellipse cx="100" cy="92" rx="42" ry="5" fill="none" stroke="#9333EA" stroke-width="1" opacity="0.4">
+        <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="rx" values="42;46;42" dur="2s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+
+  <div class="scroll-hint">
+    <span>↓</span>
+    Explora el projecte
+  </div>
+</section>
+
+<!-- QUÈ ÉS -->
+<section id="que-es" class="reveal">
+  <div class="que-es-text">
+    <p class="section-eyebrow">Experiment 1 · Introducció</p>
+    <h2 class="section-title">Què és una Bobina de Tesla?</h2>
+    <div class="section-divider"></div>
+    <p>La bobina de Tesla és un generador electromagnètic que produeix descàrregues d'alta tensió i elevades freqüències, amb efectes espectaculars com ara la seua capacitat per a <strong style="color:#fff">ionitzar l'aire o gas</strong> a una distància definida.</p>
+    <p>Açò fa possible encendre una bombeta de baix consum sense tocar-la, simplement acostant-la a la bobina. L'energia viatja per l'aire gràcies a la inducció electromagnètica.</p>
+    <p>La va inventar <strong style="color:#fff">Nikola Tesla</strong> fa més de 100 anys, i els seus principis segueixen sent fascinants i rellevants a dia de hui.</p>
+  </div>
+  <div class="fact-grid">
+    <div class="fact-card">
+      <div class="fact-icon">⚡</div>
+      <div class="fact-label">Tipus d'energia</div>
+      <div class="fact-value">Alta tensió i alta freqüència</div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-icon">💡</div>
+      <div class="fact-label">Efecte visible</div>
+      <div class="fact-value">Bombeta encesa sense cables</div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-icon">🌬️</div>
+      <div class="fact-label">Mecanisme</div>
+      <div class="fact-value">Ionització de l'aire al voltant</div>
+    </div>
+    <div class="fact-card">
+      <div class="fact-icon">📡</div>
+      <div class="fact-label">Transmissió</div>
+      <div class="fact-value">Energia sense fils, per inducció</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIMENTS -->
+<section id="experiments">
+  <div class="exp-header reveal">
+    <p class="section-eyebrow">Experiments</p>
+    <h2 class="section-title">Els nostres experiments</h2>
+    <div class="section-divider" style="margin: 0 auto 0;"></div>
+  </div>
+
+  <div class="exp-grid">
+    <!-- EXP 1 -->
+    <div class="exp-card reveal">
+      <div class="exp-number">01</div>
+      <div class="exp-title">La Bombeta de Tesla</div>
+      <span class="exp-tag tag-purple">Energia sense fils</span>
+      <p class="exp-desc">
+        Acostem una bombeta de baix consum a la bobina de Tesla en funcionament. El camp electromagnètic d'alta freqüència ionitza l'aire i fa que la bombeta s'encenga sense estar connectada a cap cable ni endoll.
+        <br><br>
+        Com si la bobina fora un "màgic elèctric" que tira energia invisible, la bombilla rep prou energia de l'aire per il·luminar-se.
+      </p>
+      <div class="exp-material">
+        <h4>⚙ Material necessari</h4>
+        <ul class="material-list">
+          <li>Una bombeta de baix consum (de casa)</li>
+          <li>Una bobina de Tesla (comprada)</li>
+          <li>Font d'alimentació adequada</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EXP 2 -->
+    <div class="exp-card reveal">
+      <div class="exp-number">02</div>
+      <div class="exp-title">La Bobina Musical</div>
+      <span class="exp-tag tag-yellow">Música amb llamps</span>
+      <p class="exp-desc">
+        La bobina de Tesla musical fa música amb espurnes elèctriques. Les espurnes s'encenen i s'apaguen molt de pressa, igual que les notes d'una cançó.
+        <br><br>
+        Un circuit diu a la bobina quan "fer cada nota". Així, l'aire vibra i la bobina <strong style="color:#fff">canta sense cap altaveu</strong>! El so es genera directament per les descàrregues elèctriques.
+      </p>
+      <div class="exp-material">
+        <h4>⚙ Material necessari</h4>
+        <ul class="material-list">
+          <li>Bobina de Tesla amb entrada MIDI/àudio</li>
+          <li>Circuit de control de freqüència</li>
+          <li>Font d'alimentació d'alta tensió</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COM FUNCIONA -->
+<section id="com-funciona" class="reveal">
+  <div style="text-align:center">
+    <p class="section-eyebrow">La ciència darrere</p>
+    <h2 class="section-title">Com funciona?</h2>
+    <div class="section-divider" style="margin: 0 auto;"></div>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">Pas 01</div>
+      <div class="step-icon">🔌</div>
+      <div class="step-title">Alimentació</div>
+      <p class="step-text">La bobina rep energia elèctrica de la xarxa i la transforma en molt, moltíssima tensió gràcies a un circuit resonant.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">Pas 02</div>
+      <div class="step-icon">🌀</div>
+      <div class="step-title">Ressonància</div>
+      <p class="step-text">La bobina primària i la secundària entren en ressonància, amplificant enormement la tensió fins a milers de volts.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">Pas 03</div>
+      <div class="step-icon">⚡</div>
+      <div class="step-title">Descàrrega</div>
+      <p class="step-text">L'alta tensió ionitza l'aire al voltant, creant llamps espectaculars i transmetent energia sense fils a qualsevol objecte proper.</p>
+    </div>
+  </div>
+</section>
+
+<!-- L'EQUIP -->
+<section id="equip" class="reveal">
+  <p class="section-eyebrow">El nostre equip</p>
+  <h2 class="section-title">Qui som?</h2>
+  <div class="section-divider" style="margin: 0 auto;"></div>
+  <p style="color:var(--muted); margin-top:1rem;">Alumnes del Col·legi Sant Francesc que hem investigat, experimentat i après junts.</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">LJ</div>
+      <div class="team-name">Lucas Jornet</div>
+      <div class="team-role">Investigació</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">SG</div>
+      <div class="team-name">Sara Gómez</div>
+      <div class="team-role">Experiments</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">FC</div>
+      <div class="team-name">Ferran Colomer</div>
+      <div class="team-role">Documentació</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">AR</div>
+      <div class="team-name">Aitana Ruiz</div>
+      <div class="team-role">Presentació</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">La Bobina de Tesla ⚡</div>
+  <p class="footer-sub">Col·legi Sant Francesc · Treball Científic · 2025</p>
+  <p class="footer-sub" style="margin-top:0.4rem; opacity:0.5">Lucas · Sara · Ferran · Aitana</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+  /* ── SPARK PARTICLES ── */
+  const canvas = document.getElementById('sparks-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.6;
+      this.vy = (Math.random() - 0.5) * 0.6;
+      this.life = 0;
+      this.maxLife = 100 + Math.random() * 150;
+      this.size = 0.5 + Math.random() * 1.5;
+      this.color = Math.random() > 0.5 ? '#9333EA' : '#EAB308';
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life++;
+      if (this.life >= this.maxLife) this.reset();
+    }
+    draw() {
+      const t = this.life / this.maxLife;
+      const alpha = t < 0.2 ? t / 0.2 : t > 0.8 ? (1 - t) / 0.2 : 1;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = alpha * 0.4;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  /* ── SCROLL REVEAL ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>

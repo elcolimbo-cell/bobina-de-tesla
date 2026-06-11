@@ -1,1 +1,0 @@
-# bobina-de-tesla
