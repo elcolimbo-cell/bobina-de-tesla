@@ -1,274 +1,712 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>Bobina de Tesla · Col·legi Sant Francesc · 2026</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>⚡ Bobina de Tesla · Sant Francesc 2026 · Colimbo Àrtic</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23020108' rx='20'/%3E%3Cpath d='M50 10 L58 38 L42 38 L50 10Z' fill='%23FDE047' /%3E%3Cpath d='M45 45 L70 45 L60 62 L54 62 L62 82 L35 62 L45 62 L38 45 L45 45Z' fill='%238B5CF6' /%3E%3Ccircle cx='50' cy='75' r='8' fill='none' stroke='%2306B6D4' stroke-width='3' /%3E%3C/svg%3E">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg-deep: #020108;
-      --bg-surface: #0a0a16;
-      --bg-card: rgba(15, 15, 35, 0.55);
-      --primary-purple: #8B5CF6;
-      --primary-violet: #A855F7;
-      --primary-cyan: #06B6D4;
-      --primary-amber: #F59E0B;
-      --neon-gold: #FDE047;
-      --text-main: #F1F5F9;
-      --text-dim: #94A3B8;
-      --text-muted: #64748B;
-      --success: #10B981;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none; /* Amaguem el cursor per defecte */
     }
-    body { background: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0a2a, #02010a);
+      color: #F1F5F9;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Cursor colimbo àrtic */
+    #loonCursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      width: 48px;
+      height: 48px;
+      left: 0;
+      top: 0;
+      filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
+      transition: transform 0.02s linear;
+    }
+
+    /* Navegació simple */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.85rem 3rem; background: rgba(2, 1, 12, 0.75); backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(139, 92, 246, 0.25);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(2, 1, 15, 0.8);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 2rem;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.4);
     }
-    .nav-brand {
-      font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em;
-      background: linear-gradient(120deg, #FDE047, #A855F7); -webkit-background-clip: text; background-clip: text; color: transparent;
-      display: flex; align-items: center; gap: 0.6rem;
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #FDE047, #A855F7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .nav-brand::before { content: "⚡"; font-size: 1.2rem; color: var(--primary-amber); background: none; }
-    nav ul { display: flex; gap: 2.2rem; list-style: none; }
-    nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; color: var(--text-dim); text-decoration: none; transition: 0.2s; position: relative; }
-    nav a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 1.5px; background: linear-gradient(90deg, #A855F7, #06B6D4); transition: width 0.25s; }
-    nav a:hover { color: white; } nav a:hover::after { width: 100%; }
-    #hero { position: relative; height: 100vh; min-height: 680px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
-    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-    .hero-content { position: relative; z-index: 12; padding: 2rem; max-width: 1000px; margin: 0 auto; backdrop-filter: blur(2px); }
-    .hero-school { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.28em; color: var(--primary-cyan); text-transform: uppercase; display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 1.8rem; background: rgba(6, 182, 212, 0.08); padding: 0.3rem 1.2rem; border-radius: 32px; border: 1px solid rgba(6, 182, 212, 0.3); }
-    h1.htitle { font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 10vw, 8rem); font-weight: 900; line-height: 0.92; margin-bottom: 1.5rem; }
-    .htitle .wla { display: block; color: #fff; text-shadow: 0 0 20px rgba(139,92,246,0.4);}
-    .htitle .wbo { display: block; background: linear-gradient(135deg, #C084FC, #22D3EE); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .htitle .wte { display: block; font-size: 0.42em; letter-spacing: 0.4em; color: rgba(255,255,255,0.6); margin-top: 0.4rem;}
-    .hero-sub { font-size: 1rem; color: var(--text-dim); max-width: 540px; margin: 0 auto 2rem; line-height: 1.7; }
-    .hero-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 2.5rem; }
-    .chip { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.4rem 1rem; border-radius: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(139, 92, 246, 0.4); backdrop-filter: blur(4px); transition: 0.1s; }
-    .hero-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); animation: pulseHint 2.5s infinite; }
-    @keyframes pulseHint { 0%,100%{ opacity: 0.4; } 50%{ opacity: 1; } }
-    .sec, .sec-full { position: relative; z-index: 10; }
-    .sec { max-width: 1280px; margin: 0 auto; padding: 6rem 2rem; }
-    .sec-full { padding: 6rem 2rem; }
-    .eye { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--primary-cyan); text-transform: uppercase; margin-bottom: 0.75rem; display: inline-block; background: rgba(6,182,212,0.08); padding: 0.2rem 1rem; border-radius: 20px; }
-    .sh2 { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 800; background: linear-gradient(135deg, #FFFFFF, #C084FC); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.02em; }
-    .hline { display: block; width: 60px; height: 3px; background: linear-gradient(90deg, #A855F7, #22D3EE); border-radius: 4px; margin: 1rem 0 2rem 0; }
-    .sci-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-    .sci-text p { color: var(--text-dim); line-height: 1.75; margin-bottom: 1.2rem; }
-    .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.2rem; }
-    .fact { background: var(--bg-card); backdrop-filter: blur(8px); border: 1px solid rgba(109,40,217,0.25); border-radius: 24px; padding: 1.5rem; transition: all 0.2s; }
-    .fact:hover { border-color: var(--primary-violet); transform: translateY(-4px); background: rgba(139,92,246,0.08); }
-    .fi { font-size: 2rem; margin-bottom: 0.6rem; }
-    .fk { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--primary-cyan); }
-    #demo-sec { background: radial-gradient(ellipse at 30% 40%, rgba(20, 10, 45, 0.7), var(--bg-surface)); border-top: 1px solid rgba(109,40,217,0.2); border-bottom: 1px solid rgba(109,40,217,0.2); }
-    .demo-wrap { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 2.8rem; }
-    #demo-canvas { width: 100%; aspect-ratio: 4/3; border-radius: 28px; border: 1px solid rgba(139,92,246,0.5); background: #010109; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6); }
-    .demo-panel { background: rgba(5,5,20,0.65); backdrop-filter: blur(12px); border-radius: 32px; padding: 1.8rem; border: 1px solid rgba(139,92,246,0.25); }
-    .pbtn { width: 100%; padding: 1rem; font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: 0.1em; background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05)); border: 1.5px solid #4B5563; border-radius: 60px; color: var(--text-dim); cursor: pointer; transition: 0.2s; }
-    .pbtn.on { border-color: var(--primary-cyan); color: #22D3EE; box-shadow: 0 0 12px rgba(6,182,212,0.3); background: rgba(6,182,212,0.1); }
-    .sg { margin-top: 0.8rem; }
-    .slbl { display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 0.3rem; }
-    input[type=range] { width: 100%; height: 4px; background: rgba(109,40,217,0.4); border-radius: 4px; }
-    input[type=range]::-webkit-slider-thumb { width: 18px; height: 18px; background: #A855F7; border: 2px solid #22D3EE; border-radius: 50%; cursor: pointer; }
-    .readout { background: #010109cc; border-radius: 20px; padding: 1rem; margin-top: 1rem; }
-    .rrow { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; margin: 0.4rem 0; }
-    .rd { color: #22c55e; font-weight: 600; } .rd.off { color: #4B5563; }
-    #osc-canvas { background: #020109; border-radius: 12px; margin-top: 0.8rem; border: 1px solid rgba(109,40,217,0.3); }
-    .ecards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-    .ecard { background: var(--bg-card); backdrop-filter: blur(12px); border-radius: 32px; padding: 2.2rem; border: 1px solid rgba(139,92,246,0.2); transition: all 0.25s; }
-    .ecard:hover { border-color: var(--primary-purple); transform: translateY(-6px); }
-    .etag { display: inline-flex; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; padding: 0.2rem 0.9rem; border-radius: 30px; margin-bottom: 1rem; }
-    .tv { background: rgba(139,92,246,0.2); color: #C084FC; border: 1px solid #8B5CF6; }
-    .tc { background: rgba(6,182,212,0.15); color: #22D3EE; border: 1px solid #06B6D4; }
-    #ferran-sec { background: linear-gradient(125deg, #03010f, #0a051c); border-top: 1px solid rgba(245,158,11,0.25); }
-    .ferran-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-    .fname { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 900; line-height: 1; background: linear-gradient(135deg, #FDE047, #F97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .dossier { background: rgba(0,0,0,0.55); backdrop-filter: blur(12px); border-radius: 32px; padding: 2rem; border: 1px solid rgba(245,158,11,0.3); }
-    .stamp { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; border: 2px solid #ef4444; color: #ef4444; padding: 0.2rem 0.8rem; border-radius: 6px; transform: rotate(-8deg); display: inline-block; margin-top: 1rem; }
-    .team-note { background: rgba(255,255,255,0.03); border-radius: 24px; padding: 1rem 1.5rem; text-align: center; max-width: 600px; margin: 2rem auto 0; border: 1px solid rgba(139,92,246,0.3); }
-    .tgrid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.8rem; margin-top: 2rem; }
-    .tcard { background: rgba(15,15,35,0.5); backdrop-filter: blur(8px); border-radius: 32px; padding: 1.8rem 2rem; text-align: center; border: 1px solid rgba(109,40,217,0.2); transition: all 0.2s; min-width: 180px; }
-    .tcard:hover { border-color: var(--primary-cyan); transform: translateY(-4px); }
-    .av { width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; background: linear-gradient(145deg, #7C3AED, #A855F7); font-size: 1.2rem; }
-    #chat-sec { background: radial-gradient(circle at 20% 30%, #0c0a1a, #010105); }
-    .chat-box { background: #03010cee; border-radius: 32px; border: 1px solid rgba(139,92,246,0.5); overflow: hidden; backdrop-filter: blur(8px); }
-    .chat-msgs { height: 380px; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
-    .msg { display: flex; gap: 0.7rem; }
-    .msg.user { justify-content: flex-end; }
-    .mb { background: rgba(109,40,217,0.15); border-radius: 20px; padding: 0.6rem 1rem; max-width: 85%; color: #E2E8F0; }
-    .msg.user .mb { background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); }
-    .cin-row { display: flex; border-top: 1px solid rgba(255,255,255,0.05); }
-    #cin { flex: 1; background: transparent; border: none; padding: 1rem; color: white; font-family: 'Inter', sans-serif; outline: none; }
-    #csend { background: #8B5CF6; border: none; padding: 0 1.5rem; font-weight: bold; cursor: pointer; transition: 0.2s; color: white; font-family: 'JetBrains Mono', monospace; }
-    #csend:hover { background: #A855F7; }
-    footer { text-align: center; padding: 2.5rem; border-top: 1px solid rgba(139,92,246,0.2); }
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s ease; }
-    .reveal.vis { opacity: 1; transform: translateY(0); }
-    @media (max-width: 900px) {
-      .demo-wrap, .sci-grid, .ferran-grid, .ecards { grid-template-columns: 1fr; gap: 2rem; }
+    nav ul {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+    nav a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #CBD5E1;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    nav a:hover { color: white; text-shadow: 0 0 4px #A855F7; }
+
+    /* Hero - text complet garantit */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 3rem;
+      position: relative;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 2rem 2rem;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: #06B6D4;
+      background: rgba(6,182,212,0.15);
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 12vw, 6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+    }
+    .line1 { display: block; color: white; }
+    .line2 { display: block; background: linear-gradient(135deg, #C084FC, #22D3EE); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .line3 { display: block; font-size: 0.4em; letter-spacing: 0.4em; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+    .desc {
+      font-size: 1rem;
+      color: #CBD5E1;
+      max-width: 550px;
+      margin: 1.2rem auto;
+      line-height: 1.5;
+    }
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
+      margin: 1.5rem 0;
+    }
+    .member-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(139,92,246,0.5);
+    }
+    .hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: #64748B;
+      animation: subtlePulse 2s infinite;
+    }
+    @keyframes subtlePulse {
+      0%,100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Seccions comunes */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: #06B6D4;
+      background: rgba(6,182,212,0.1);
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #C084FC);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0.5rem 0 1rem;
+    }
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #A855F7, #22D3EE);
+      margin: 0 0 1.5rem 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .card {
+      background: rgba(15,15,35,0.5);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 1.2rem;
+      border: 1px solid rgba(139,92,246,0.3);
+      transition: 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: #A855F7; }
+
+    .demo-wrap {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+    }
+    #demoCanvas {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #010109;
+      border-radius: 28px;
+      border: 2px solid rgba(139,92,246,0.6);
+    }
+    .controls {
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 1.2rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      background: rgba(139,92,246,0.2);
+      border: 1px solid #4B5563;
+      border-radius: 40px;
+      color: #CBD5E1;
+      cursor: none;
+      transition: 0.2s;
+    }
+    button.active {
+      border-color: #06B6D4;
+      color: #22D3EE;
+      box-shadow: 0 0 12px rgba(6,182,212,0.3);
+    }
+    .slider-group { margin-top: 1rem; }
+    .slider-label { display: flex; justify-content: space-between; font-size: 0.7rem; }
+    input[type=range] { width: 100%; height: 3px; background: #4B5563; border-radius: 3px; -webkit-appearance: none; }
+    input[type=range]::-webkit-slider-thumb { width: 14px; height: 14px; background: #A855F7; border-radius: 50%; border: 2px solid #22D3EE; cursor: none; }
+    .stats {
+      background: #010109aa;
+      border-radius: 20px;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      font-family: monospace;
+    }
+    .stat-row { display: flex; justify-content: space-between; margin: 0.3rem 0; }
+    #oscilloscope { background: #010109; border-radius: 12px; margin-top: 0.6rem; width: 100%; height: 55px; }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .member {
+      background: rgba(15,15,35,0.5);
+      border-radius: 28px;
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+      min-width: 140px;
+    }
+    .avatar {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(145deg, #7C3AED, #A855F7);
+      border-radius: 50%;
+      margin: 0 auto 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    .chat-box {
+      background: rgba(3,1,12,0.8);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      border: 1px solid rgba(139,92,246,0.5);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .messages {
+      height: 320px;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .message { display: flex; margin-bottom: 0.8rem; }
+    .message.user { justify-content: flex-end; }
+    .bubble {
+      background: rgba(109,40,217,0.2);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      max-width: 80%;
+    }
+    .user .bubble { background: rgba(6,182,212,0.2); border: 1px solid rgba(6,182,212,0.4); }
+    .input-row {
+      display: flex;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    #chatInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 0.8rem;
+      color: white;
+      outline: none;
+    }
+    #sendBtn {
+      width: auto;
+      padding: 0 1.2rem;
+      background: #8B5CF6;
+      border: none;
+      border-radius: 0;
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(139,92,246,0.2);
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: 0.6s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 800px) {
+      .demo-wrap, .grid-2, .exp-grid { grid-template-columns: 1fr; gap: 1.2rem; }
       nav ul { display: none; }
-      .sec, .sec-full { padding: 3rem 1.2rem; }
+      .hero-content { padding: 1.5rem; }
+      .line3 { letter-spacing: 0.2em; }
     }
   </style>
 </head>
 <body>
-<nav><span class="nav-brand">⚡ BOBINA DE TESLA · SANT FRANCESC 2026</span><ul><li><a href="#ciencia">CIÈNCIA</a></li><li><a href="#demo-sec">SIMULADOR</a></li><li><a href="#experiments">EXPERIMENTS</a></li><li><a href="#ferran-sec">L'EQUIP</a></li><li><a href="#chat-sec">ORACLE</a></li></ul></nav>
-<section id="hero"><canvas id="hero-canvas"></canvas><div class="hero-content"><div class="hero-school">⚡ COL·LEGI SANT FRANCESC · PROJECTE 2026</div><h1 class="htitle"><span class="wla">La</span><span class="wbo">Bobina</span><span class="wte">DE TESLA</span></h1><p class="hero-sub">Un projecte col·laboratiu on cadascú aporta el seu talent: investigació, documentació, experiments i presentació. Descobreix l'electromagnetisme com mai.</p><div class="hero-chips"><span class="chip">Lucas Jornet</span><span class="chip">Sara Gómez</span><span class="chip">Ferran Colomer</span><span class="chip">Aitana Ruiz</span></div><p class="hero-hint">✨ mou el ratolí sobre la bobina per generar llamps interactius</p></div></section>
-<section id="ciencia" class="sec reveal"><div class="sci-grid"><div class="sci-text"><p class="eye">01 · FONAMENTS CIENTÍFICS</p><h2 class="sh2">Què és una Bobina de Tesla?</h2><span class="hline"></span><p>La bobina de Tesla és un <strong>generador electromagnètic</strong> que produeix descàrregues d'alta tensió i elevades freqüències. Inventada per Nikola Tesla al voltant de 1891, segueix sent un dels dispositius més espectaculars de la física.</p><p>El seu principi clau és la <strong>ressonància electromagnètica</strong>: dues bobines (primària i secundària) sintonitzades a la mateixa freqüència ampliquen la tensió fins a centenars de kilovolts, ionitzant l'aire al voltant i creant llamps visibles.</p></div><div class="facts"><div class="fact"><div class="fi">⚡</div><div class="fk">Energia</div><div class="fv">Alta tensió · Alta freqüència</div></div><div class="fact"><div class="fi">💡</div><div class="fk">Efecte 1</div><div class="fv">Bombeta sense cables</div></div><div class="fact"><div class="fi">🎵</div><div class="fk">Música amb llamps</div><div class="fv">Modulació d'espurnes</div></div><div class="fact"><div class="fi">📡</div><div class="fk">Principi</div><div class="fv">Ressonància electromagnètica</div></div></div></div></section>
-<div id="demo-sec" class="sec-full reveal"><div class="demo-wrap"><div><p class="eye">02 · SIMULADOR D'ALTA TENSIÓ</p><h2 class="sh2">Controla la Bobina</h2><span class="hline"></span><canvas id="demo-canvas"></canvas></div><div class="demo-panel"><button class="pbtn" id="pbtn" onclick="togglePower()">◉  ENCENDRE</button><div class="sg"><div class="slbl"><span class="sname">POTÈNCIA</span><span class="sval" id="pval">0 kV</span></div><input type="range" id="pslider" min="0" max="100" value="0" disabled oninput="upPow(this.value)"/></div><div class="sg"><div class="slbl"><span class="sname">FREQÜÈNCIA</span><span class="sval" id="fval">— kHz</span></div><input type="range" id="fslider" min="10" max="100" value="55" disabled oninput="upFreq(this.value)"/></div><div class="readout"><div class="rt">⚡ READOUT DEL SISTEMA</div><div class="rrows"><div class="rrow"><span>ESTAT:</span><span id="rest">APAGAT</span></div><div class="rrow"><span>TENSIÓ:</span><span id="rtens">--- kV</span></div><div class="rrow"><span>IONITZACIÓ:</span><span id="rion">INACTIU</span></div></div><canvas id="osc-canvas" width="400" height="65"></canvas></div><div class="warn-box" style="font-size:0.65rem;color:#94a3b8;">⚠️ Simulació educativa. L'experiment real es fa sota supervisió docent.</div></div></div></div>
-<section id="experiments" class="sec reveal"><p class="eye">03 · EXPERIMENTS EN DIRECTE</p><h2 class="sh2">Dos experiments, un principi</h2><span class="hline"></span><div class="ecards"><div class="ecard"><span class="etag tv">⚡ ENERGIA SENSE FILS</span><h3>La Bombeta de Tesla</h3><p>Acostem una bombeta de baix consum a la bobina en funcionament. El camp electromagnètic d'alta freqüència ionitza l'aire i la bombeta s'encén — sense cable, sense endoll.</p></div><div class="ecard"><span class="etag tc">🎵 MÚSICA AMB LLAMPS</span><h3>La Bobina Musical</h3><p>Les espurnes s'encenen i s'apaguen a una freqüència controlada per un circuit. L'aire vibra i la bobina canta sense cap altaveu físic.</p></div></div></section>
-<div id="ferran-sec" class="sec-full reveal"><div class="ferran-grid"><div><p class="eye">04 · L'EQUIP</p><div class="fname">Lucas · Sara · Ferran · Aitana</div><div class="ftitle" style="margin-top:0.5rem; color:#FDE047;">// Quatre talents, un objectiu</div><p class="fdesc" style="margin-top:1.2rem;">Lucas investiga els fonaments, Sara documenta cada pas, Ferran opera la bobina i Aitana prepara la presentació. Junts hem après i gaudit fent realitat aquest projecte.</p><div style="margin-top: 1.2rem; background: rgba(255,255,255,0.02); border-radius: 20px; padding: 0.8rem 1rem;"><span style="font-family:'JetBrains Mono'; font-size:0.7rem;">✨ "L'energia invisible que uneix ciència i equip."</span></div></div><div class="dossier"><div class="dh" style="font-family:'JetBrains Mono'; color:#F59E0B;">⚡ REPARTIMENT DE TASQUES</div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>INVESTIGACIÓ</span><span style="color:#FDE047;">Lucas Jornet</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>DOCUMENTACIÓ</span><span style="color:#FDE047;">Sara Gómez</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>EXPERIMENTACIÓ</span><span style="color:#FDE047;">Ferran Colomer</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>PRESENTACIÓ</span><span style="color:#FDE047;">Aitana Ruiz</span></div><div class="stamp" style="border-color: #22c55e; color: #22c55e;">2026</div></div></div></div>
-<section id="equip" class="sec reveal" style="text-align:center"><p class="eye">05 · L'equip científic</p><h2 class="sh2">Un grup, un objectiu</h2><span class="hline" style="margin:1rem auto;"></span><div class="tgrid"><div class="tcard"><div class="av">LJ</div><div class="tname">Lucas Jornet</div><div class="trole">Investigació teòrica</div></div><div class="tcard"><div class="av">SG</div><div class="tname">Sara Gómez</div><div class="trole">Documentació i fonts</div></div><div class="tcard"><div class="av">FC</div><div class="tname">Ferran Colomer</div><div class="trole">Muntatge i operació</div></div><div class="tcard"><div class="av">AR</div><div class="tname">Aitana Ruiz</div><div class="trole">Comunicació i presentació</div></div></div><div class="team-note"><span style="font-family:'JetBrains Mono';">⚡ Treball en equip des de 2025 fins ara.</span></div></section>
-<div id="chat-sec" class="sec-full reveal"><div class="chat-wrap" style="max-width: 800px; margin:0 auto;"><div style="text-align:center; margin-bottom:2rem;"><p class="eye">06 · IA AVANÇADA LOCAL</p><h2 class="sh2">Oracle de la Bobina</h2><span class="hline" style="margin:1rem auto;"></span><p style="color:#94a3b8;">Pregunta sobre electromagnetisme, experiments o el projecte. La IA genera respostes úniques sense necessitat d'API.</p></div><div class="chat-box"><div style="display: flex; padding:0.8rem; border-bottom:1px solid rgba(139,92,246,0.2);"><span>⚡ Oracle Neural · Respostes dinàmiques</span><div style="margin-left:auto; font-size:0.7rem;">🧠 Sense clau API</div></div><div class="chat-msgs" id="cmsgs"><div class="msg bot"><div class="mb">⚡ Hola! Sóc l'Oracle del projecte de la Bobina de Tesla. Pregunta'm sobre com funciona, els experiments, els membres de l'equip (Lucas, Sara, Ferran, Aitana) o la física que hi ha darrere. No repetiré respostes, cada vegada serà diferent.</div></div></div><div class="cin-row"><input type="text" id="cin" placeholder="Fes una pregunta..." onkeydown="if(event.key==='Enter')sendSmartMsg()"/><button id="csend" onclick="sendSmartMsg()">→</button></div></div></div></div>
-<footer><div class="ftl" style="font-family:'Orbitron';">⚡ La Bobina de Tesla</div><p class="fts">Col·legi Sant Francesc · Projecte 2026 · Lucas · Sara · Ferran · Aitana</p></footer>
+
+<canvas id="loonCursor" width="48" height="48"></canvas>
+
+<nav>
+  <span class="logo">⚡ TESLA COIL · SANT FRANCESC 2026</span>
+  <ul>
+    <li><a href="#ciencia">CIÈNCIA</a></li>
+    <li><a href="#simulator">SIMULADOR</a></li>
+    <li><a href="#experiments">EXPERIMENTS</a></li>
+    <li><a href="#equip">EQUIP</a></li>
+    <li><a href="#chat">ORACLE</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="badge">⚡ COL·LEGI SANT FRANCESC · PROJECTE 2026</div>
+    <h1>
+      <span class="line1">La</span>
+      <span class="line2">Bobina</span>
+      <span class="line3">DE TESLA</span>
+    </h1>
+    <p class="desc">Descàrregues elèctriques, ressonància i música amb llamps. Un viatge a l'electromagnetisme d'alta tensió.</p>
+    <div class="team">
+      <span class="member-chip">Lucas Jornet</span>
+      <span class="member-chip">Sara Gómez</span>
+      <span class="member-chip">Ferran Colomer</span>
+      <span class="member-chip">Aitana Ruiz</span>
+    </div>
+    <p class="hint">✨ Mou el ratolí sobre la bobina per desencadenar llamps fractal · Cursor: Colimbo Àrtic</p>
+  </div>
+</section>
+
+<section id="ciencia" class="section reveal">
+  <div class="grid-2">
+    <div>
+      <div class="section-tag">01 · FONAMENTS</div>
+      <h2>Què és una Bobina de Tesla?</h2>
+      <div class="divider"></div>
+      <p>La bobina de Tesla és un <strong>generador electromagnètic</strong> que produeix descàrregues d'alta tensió i elevades freqüències. Inventada per Nikola Tesla al voltant de 1891, segueix sent un dels dispositius més espectaculars de la física.</p>
+      <p style="margin-top: 0.8rem;">El seu principi clau és la <strong>ressonància electromagnètica</strong>: dues bobines sintonitzades a la mateixa freqüència ampliquen la tensió fins a centenars de kilovolts, ionitzant l'aire i creant llamps visibles.</p>
+    </div>
+    <div class="facts">
+      <div class="card"><div style="font-size: 1.8rem;">⚡</div><div style="font-size:0.7rem; color:#06B6D4;">Energia</div><div>Alta tensió · Alta freqüència</div></div>
+      <div class="card"><div style="font-size: 1.8rem;">💡</div><div style="font-size:0.7rem; color:#06B6D4;">Efecte 1</div><div>Bombeta sense cables</div></div>
+      <div class="card"><div style="font-size: 1.8rem;">🎵</div><div style="font-size:0.7rem; color:#06B6D4;">Efecte 2</div><div>Música amb llamps</div></div>
+      <div class="card"><div style="font-size: 1.8rem;">📡</div><div style="font-size:0.7rem; color:#06B6D4;">Principi</div><div>Ressonància electromagnètica</div></div>
+    </div>
+  </div>
+</section>
+
+<div id="simulator" class="section reveal">
+  <div class="section-tag">02 · SIMULADOR</div>
+  <h2>Controla la Bobina</h2>
+  <div class="divider"></div>
+  <div class="demo-wrap">
+    <canvas id="demoCanvas"></canvas>
+    <div class="controls">
+      <button id="powerBtn">◉ ENCENDRE</button>
+      <div class="slider-group">
+        <div class="slider-label"><span>POTÈNCIA (kV)</span><span id="powerVal">0 kV</span></div>
+        <input type="range" id="powerSlider" min="0" max="100" value="0" disabled>
+      </div>
+      <div class="slider-group">
+        <div class="slider-label"><span>FREQÜÈNCIA (kHz)</span><span id="freqVal">— kHz</span></div>
+        <input type="range" id="freqSlider" min="10" max="100" value="55" disabled>
+      </div>
+      <div class="stats">
+        <div class="stat-row"><span>ESTAT:</span><span id="status">APAGAT</span></div>
+        <div class="stat-row"><span>TENSIÓ:</span><span id="voltage">--- kV</span></div>
+        <div class="stat-row"><span>IONITZACIÓ:</span><span id="ionization">INACTIU</span></div>
+        <canvas id="oscilloscope"></canvas>
+      </div>
+      <div style="font-size:0.6rem; color:#64748B; margin-top:0.6rem;">⚡ Simulació educativa</div>
+    </div>
+  </div>
+</div>
+
+<section id="experiments" class="section reveal">
+  <div class="section-tag">03 · EXPERIMENTS</div>
+  <h2>Dos experiments, un principi</h2>
+  <div class="divider"></div>
+  <div class="exp-grid">
+    <div class="card"><span style="background:rgba(139,92,246,0.2); padding:0.1rem 0.6rem; border-radius:40px;">⚡ ENERGIA SENSE FILS</span><h3 style="margin:0.8rem 0;">La Bombeta de Tesla</h3><p>Acostem una bombeta de baix consum a la bobina. El camp electromagnètic ionitza l'aire i la bombeta s'encén sense cables.</p></div>
+    <div class="card"><span style="background:rgba(6,182,212,0.15); padding:0.1rem 0.6rem; border-radius:40px;">🎵 MÚSICA AMB LLAMPS</span><h3 style="margin:0.8rem 0;">La Bobina Musical</h3><p>Modulant la freqüència de les espurnes, l'aire vibra i la bobina canta sense cap altaveu.</p></div>
+  </div>
+</section>
+
+<section id="equip" class="section reveal" style="text-align:center">
+  <div class="section-tag">04 · L'EQUIP</div>
+  <h2>Un grup, un objectiu</h2>
+  <div class="divider" style="margin:0 auto 1.5rem;"></div>
+  <div class="team-grid">
+    <div class="member"><div class="avatar">LJ</div><div>Lucas Jornet</div><div style="font-size:0.7rem;">Investigació</div></div>
+    <div class="member"><div class="avatar">SG</div><div>Sara Gómez</div><div style="font-size:0.7rem;">Documentació</div></div>
+    <div class="member"><div class="avatar">FC</div><div>Ferran Colomer</div><div style="font-size:0.7rem;">Experimentació</div></div>
+    <div class="member"><div class="avatar">AR</div><div>Aitana Ruiz</div><div style="font-size:0.7rem;">Presentació</div></div>
+  </div>
+</section>
+
+<div id="chat" class="section reveal">
+  <div style="text-align:center;">
+    <div class="section-tag">05 · IA LOCAL</div>
+    <h2>Oracle de la Bobina</h2>
+    <div class="divider" style="margin:0 auto 1rem;"></div>
+  </div>
+  <div class="chat-box">
+    <div style="display:flex; padding:0.6rem; border-bottom:1px solid rgba(139,92,246,0.3);"><span>⚡ Oracle Neural</span><span style="margin-left:auto;">Sense API</span></div>
+    <div class="messages" id="chatMessages">
+      <div class="message bot"><div class="bubble">⚡ Hola! Pregunta sobre la bobina, experiments o l'equip (Lucas, Sara, Ferran, Aitana).</div></div>
+    </div>
+    <div class="input-row">
+      <input type="text" id="chatInput" placeholder="Fes una pregunta...">
+      <button id="sendBtn">→</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="font-family:'Orbitron';">⚡ La Bobina de Tesla</div>
+  <p style="font-size:0.7rem;">Col·legi Sant Francesc · Projecte 2026 · Lucas · Sara · Ferran · Aitana</p>
+</footer>
 
 <script>
-// Funcionalitats originals: fractal llamps, simulador (escurçat per espai però idèntic en funcionament)
-if(!CanvasRenderingContext2D.prototype.roundRect){
-  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
-    this.beginPath();this.moveTo(x+r,y);this.lineTo(x+w-r,y);
-    this.quadraticCurveTo(x+w,y,x+w,y+r);this.lineTo(x+w,y+h-r);
-    this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);this.lineTo(x+r,y+h);
-    this.quadraticCurveTo(x,y+h,x,y+h-r);this.lineTo(x,y+r);
-    this.quadraticCurveTo(x,y,x+r,y);this.closePath();return this;
-  }
-}
-function fractalBolt(x1,y1,x2,y2,spread,depth){
-  if(depth===0) return [[x1,y1,x2,y2]];
-  const mx=(x1+x2)/2+(Math.random()-.5)*spread; const my=(y1+y2)/2+(Math.random()-.5)*spread;
-  let segs=[...fractalBolt(x1,y1,mx,my,spread*.55,depth-1),...fractalBolt(mx,my,x2,y2,spread*.55,depth-1)];
-  if(depth>1&&Math.random()>.62){ const ang=Math.atan2(y2-y1,x2-x1)+(Math.random()-.5)*1.9; const len=Math.hypot(x2-x1,y2-y1)*.38; segs.push(...fractalBolt(mx,my,mx+Math.cos(ang)*len,my+Math.sin(ang)*len,spread*.32,depth-2));}
-  return segs;
-}
-const hCanvas=document.getElementById('hero-canvas'),hCtx=hCanvas.getContext('2d');
-let mX=-999,mY=-999,heroBolts=[],bAlpha=0,lastHeroB=0;
-function resizeHero(){hCanvas.width=window.innerWidth;hCanvas.height=document.getElementById('hero').offsetHeight;}
-resizeHero();window.addEventListener('resize',resizeHero);
-document.getElementById('hero').addEventListener('mousemove',e=>{const r=hCanvas.getBoundingClientRect();mX=e.clientX-r.left;mY=e.clientY-r.top;});
-document.getElementById('hero').addEventListener('mouseleave',()=>{mX=-999;});
-const pts=Array.from({length:65},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0003,vy:(Math.random()-.5)*.0003,life:Math.random(),sz:.6+Math.random()*1.3,col:Math.random()>.5?'#8B5CF6':'#06B6D4'}));
-function drawHeroCoil(cx,cy,W,H){ const sc=Math.min(W,H)*0.0008; hCtx.beginPath();hCtx.ellipse(cx,cy,60*sc,22*sc,0,0,Math.PI*2);hCtx.fillStyle='rgba(139,92,246,0.15)';hCtx.fill(); hCtx.beginPath();hCtx.roundRect(cx-15*sc,cy+10*sc,30*sc,75*sc,4);hCtx.fillStyle='#070714';hCtx.fill();hCtx.strokeStyle='#B45309';hCtx.stroke(); hCtx.beginPath();hCtx.ellipse(cx,cy,45*sc,15*sc,0,0,Math.PI*2);hCtx.fillStyle='#100640';hCtx.strokeStyle='#A855F7';hCtx.fill();hCtx.stroke(); return {tx:cx,ty:cy-12*sc};}
-function heroLoop(ts){ requestAnimationFrame(heroLoop); const W=hCanvas.width,H=hCanvas.height; hCtx.clearRect(0,0,W,H); pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life+=0.003;if(p.life>1){p.x=Math.random();p.y=Math.random();p.life=0;}hCtx.beginPath();hCtx.arc(p.x*W,p.y*H,p.sz,0,Math.PI*2);hCtx.fillStyle=p.col;hCtx.globalAlpha=Math.sin(p.life*Math.PI)*0.5;hCtx.fill();}); hCtx.globalAlpha=1; const cx=W/2,cy=H*0.56; const {tx,ty}=drawHeroCoil(cx,cy,W,H); if(mX>0&&Math.hypot(mX-cx,mY-cy)>80){ if(ts-lastHeroB>70){lastHeroB=ts;heroBolts=[];bAlpha=1;for(let i=0;i<3;i++)heroBolts.push(fractalBolt(tx,ty,mX+(Math.random()-.5)*25,mY+(Math.random()-.5)*25,75,5));} bAlpha*=.82; heroBolts.forEach(bolt=>{ [['rgba(168,85,247,',2.5],['rgba(6,182,212,',1.2]].forEach(([col,lw])=>{hCtx.lineWidth=lw;bolt.forEach(([x1,y1,x2,y2])=>{hCtx.beginPath();hCtx.moveTo(x1,y1);hCtx.lineTo(x2,y2);hCtx.strokeStyle=col+(bAlpha*.9)+')';hCtx.stroke();});});});}}
-requestAnimationFrame(heroLoop);
-const dCanvas=document.getElementById('demo-canvas'),dCtx=dCanvas.getContext('2d');
-let powered=false,pow=0,freq=55,demoBolts=[],lastDB=0,oscPh=0;
-function resizeDemo(){dCanvas.width=dCanvas.offsetWidth;dCanvas.height=dCanvas.offsetWidth*.75;}
-resizeDemo();window.addEventListener('resize',resizeDemo);
-function drawDemoCoil(cx,cy,sc){ dCtx.fillStyle='#020209';dCtx.fillRect(0,0,dCanvas.width,dCanvas.height); dCtx.beginPath();dCtx.roundRect(cx-13*sc,cy+9*sc,26*sc,72*sc,3);dCtx.fillStyle='#06060F';dCtx.fill();dCtx.strokeStyle=powered?'#B45309':'#2A1A05';dCtx.stroke(); if(powered&&pow>0){ const pg=dCtx.createRadialGradient(cx,cy,0,cx,cy,55*sc);pg.addColorStop(0,`rgba(139,92,246,${pow/120})`);dCtx.beginPath();dCtx.ellipse(cx,cy,58*sc,20*sc,0,0,Math.PI*2);dCtx.fillStyle=pg;dCtx.fill();} dCtx.beginPath();dCtx.ellipse(cx,cy,42*sc,14*sc,0,0,Math.PI*2);dCtx.fillStyle='#100640';dCtx.strokeStyle=powered?'#A855F7':'#2A1A5A';dCtx.fill();dCtx.stroke(); return {tx:cx,ty:cy-14*sc};}
-function demoLoop(ts){ requestAnimationFrame(demoLoop); const W=dCanvas.width,H=dCanvas.height,cx=W*.5,cy=H*.6,sc=Math.min(W,H)*0.01; const {tx,ty}=drawDemoCoil(cx,cy,sc); if(powered&&pow>0){const rate=Math.max(30,80-(freq/2));if(ts-lastDB>rate){lastDB=ts;demoBolts=[];let nb=1+Math.floor(pow/35);for(let i=0;i<nb;i++){let ang=-Math.PI/2+(Math.random()-.5)*1.2,len=(40+pow)*sc*1.2;demoBolts.push(fractalBolt(tx,ty,tx+Math.cos(ang)*len+(Math.random()-.5)*18,ty+Math.sin(ang)*len,(18+pow*.7)*sc,4));}}demoBolts.forEach(b=>{b.forEach(seg=>{dCtx.lineWidth=2.5;dCtx.beginPath();dCtx.moveTo(seg[0],seg[1]);dCtx.lineTo(seg[2],seg[3]);dCtx.strokeStyle=`rgba(168,85,247,0.9)`;dCtx.stroke();});});} const oC=document.getElementById('osc-canvas'),oCtx=oC.getContext('2d');const oW=oC.offsetWidth||380,oH=65;oC.width=oW;oC.height=oH;oCtx.fillStyle='#000';oCtx.fillRect(0,0,oW,oH); if(powered&&pow>0){oscPh+=0.03+(freq/300);}let amp=powered&&pow>0?(pow/100)*22:2;for(let x=0;x<oW;x++){let y=oH/2+Math.sin(x*0.08*(freq/30)+oscPh)*amp;x===0?oCtx.moveTo(x,y):oCtx.lineTo(x,y);}oCtx.strokeStyle=powered?'#22c55e':'#3b3b4f';oCtx.stroke();}
-requestAnimationFrame(demoLoop);
-function togglePower(){powered=!powered;const btn=document.getElementById('pbtn');const sliders=[document.getElementById('pslider'),document.getElementById('fslider')];if(powered){btn.textContent='◉ APAGAR';btn.classList.add('on');sliders.forEach(s=>s.disabled=false);upPow(document.getElementById('pslider').value);upFreq(document.getElementById('fslider').value);document.getElementById('rest').innerText='ACTIU';document.getElementById('rion').innerText='ACTIU';}else{btn.textContent='◉ ENCENDRE';btn.classList.remove('on');sliders.forEach(s=>s.disabled=true);document.getElementById('pslider').value=0;pow=0;document.getElementById('pval').innerText='0 kV';document.getElementById('rest').innerText='APAGAT';document.getElementById('rtens').innerText='--- kV';document.getElementById('rion').innerText='INACTIU';}}
-function upPow(v){pow=parseInt(v);let kv=pow*2.5;document.getElementById('pval').innerText=kv.toFixed(0)+' kV';document.getElementById('rtens').innerText=kv.toFixed(0)+' kV';}
-function upFreq(v){freq=parseInt(v);let kHz=100+freq*12;document.getElementById('fval').innerText=kHz.toFixed(0)+' kHz';}
-const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.reveal').forEach(r=>ro.observe(r));
+  // ========== CURSOR COLIMBO ÀRTIC (VISIBLE I SUAU) ==========
+  const cursorCanvas = document.getElementById('loonCursor');
+  const cursorCtx = cursorCanvas.getContext('2d');
+  let mouseX = 0, mouseY = 0;
+  let wingPhase = 0;
 
-// ---------- IA AVANÇADA SENSE FRASES REPETITIVES D'IGUALTAT ----------
-const teamInfo = {
-  lucas: "investigació teòrica, fonaments físics i cerca d'informació científica",
-  sara: "documentació, organització de fonts i registre del projecte",
-  ferran: "muntatge de la bobina i operació pràctica durant els experiments",
-  aitana: "comunicació, presentació i preparació de materials divulgatius"
-};
-const concepts = {
-  resonancia: "La ressonància electromagnètica permet transferir energia màxima entre bobines quan sintonitzen a la mateixa freqüència. És el cor de la bobina de Tesla.",
-  bombeta: "S'encén per inducció: el camp elèctric altern d'alta freqüència indueix corrent a la bombeta fluorescent, ionitzant el gas interior.",
-  musica: "Modulant la freqüència de les espurnes (PWM), l'aire vibra generant notes. La bobina actua com un altaveu sense membrana.",
-  tesla: "Nikola Tesla (1856-1943) va inventar la bobina per estudiar l'alta freqüència i somiava amb transmissió d'energia sense fils.",
-  perill: "La bobina real pot superar els 500 kV. S'ha de manipular amb mesures extremes. Nosaltres ho fem sota supervisió docent."
-};
+  function drawLoon() {
+    cursorCanvas.width = 48;
+    cursorCanvas.height = 48;
+    cursorCtx.clearRect(0, 0, 48, 48);
+    cursorCtx.save();
+    cursorCtx.translate(24, 24);
+    // cos
+    cursorCtx.beginPath();
+    cursorCtx.ellipse(0, 2, 12, 8, 0, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#1A1A1A';
+    cursorCtx.fill();
+    cursorCtx.beginPath();
+    cursorCtx.ellipse(0, 0, 10, 7, 0, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#F0F0F0';
+    cursorCtx.fill();
+    // cap
+    cursorCtx.beginPath();
+    cursorCtx.ellipse(0, -8, 7, 6, 0, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#1A1A1A';
+    cursorCtx.fill();
+    cursorCtx.beginPath();
+    cursorCtx.ellipse(0, -9, 5, 4.5, 0, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#F0F0F0';
+    cursorCtx.fill();
+    // ull
+    cursorCtx.beginPath();
+    cursorCtx.arc(-2, -11, 1.2, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#FFFFFF';
+    cursorCtx.fill();
+    cursorCtx.beginPath();
+    cursorCtx.arc(-2.5, -11, 0.6, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#000000';
+    cursorCtx.fill();
+    cursorCtx.beginPath();
+    cursorCtx.arc(-2.8, -11.3, 0.2, 0, Math.PI * 2);
+    cursorCtx.fillStyle = '#FFFFFF';
+    cursorCtx.fill();
+    // bec
+    cursorCtx.beginPath();
+    cursorCtx.moveTo(3, -12);
+    cursorCtx.lineTo(9, -12.5);
+    cursorCtx.lineTo(3, -11);
+    cursorCtx.fillStyle = '#F59E0B';
+    cursorCtx.fill();
+    // ales
+    const wingY = Math.sin(wingPhase) * 4;
+    cursorCtx.beginPath();
+    cursorCtx.moveTo(-10, -2);
+    cursorCtx.quadraticCurveTo(-14, -2 + wingY, -6, -4);
+    cursorCtx.fillStyle = '#2D2D2D';
+    cursorCtx.fill();
+    cursorCtx.beginPath();
+    cursorCtx.moveTo(10, -2);
+    cursorCtx.quadraticCurveTo(14, -2 - wingY, 6, -4);
+    cursorCtx.fill();
+    // cua
+    cursorCtx.beginPath();
+    cursorCtx.moveTo(0, 9);
+    cursorCtx.lineTo(-4, 13);
+    cursorCtx.lineTo(4, 13);
+    cursorCtx.fillStyle = '#1A1A1A';
+    cursorCtx.fill();
+    cursorCtx.restore();
+    wingPhase += 0.12;
+    requestAnimationFrame(() => drawLoon());
+  }
+  drawLoon();
 
-function getSmartResponse(question, history) {
-  const q = question.toLowerCase();
-  let intent = { type: "general", entities: [] };
-  if (q.includes("lucas")) intent = { type: "person", entity: "lucas" };
-  else if (q.includes("sara")) intent = { type: "person", entity: "sara" };
-  else if (q.includes("ferran")) intent = { type: "person", entity: "ferran" };
-  else if (q.includes("aitana")) intent = { type: "person", entity: "aitana" };
-  else if (q.includes("equip") || q.includes("grup") || q.includes("membres")) intent = { type: "team" };
-  else if (q.includes("bombeta") || q.includes("encesa") || q.includes("sense cable")) intent = { type: "concept", entity: "bombeta" };
-  else if (q.includes("música") || q.includes("melodia") || q.includes("canta")) intent = { type: "concept", entity: "musica" };
-  else if (q.includes("ressonància") || q.includes("freqüència") || q.includes("sintonitzada")) intent = { type: "concept", entity: "resonancia" };
-  else if (q.includes("nikola") || q.includes("inventor")) intent = { type: "concept", entity: "tesla" };
-  else if (q.includes("perill") || q.includes("seguretat")) intent = { type: "concept", entity: "perill" };
-  
-  const randomIntro = [
-    "Mmm, bona pregunta! ", "Ai, això és interessant. ", "Doncs mira: ", "Segons el que hem après al projecte, ", "Ho explico de manera clara: ",
-    "Genial, preguntes com aquesta fan que l'equip brilli. ", "Com a oracle del Sant Francesc, et dic: "
-  ];
-  const randomClosing = [" ✨", " ⚡", " 🔥", " 💡", " 🎵", " 🧠"];
-  let base = randomIntro[Math.floor(Math.random() * randomIntro.length)];
-  
-  if (intent.type === "person") {
-    const person = intent.entity;
-    const role = teamInfo[person];
-    const friendlyName = person.charAt(0).toUpperCase() + person.slice(1);
-    const variants = [
-      `${friendlyName} s'encarrega de ${role}. La seua feina és fonamental per al projecte.`,
-      `En/${friendlyName} fa la tasca de ${role}. Cadascú aporta el seu talent específic.`,
-      `La contribució de ${friendlyName} és ${role}. Així construïm el coneixement col·lectiu.`,
-      `${friendlyName} treballa en ${role}. Sense la seua part, l'engranatge no funcionaria igual.`
-    ];
-    return base + variants[Math.floor(Math.random() * variants.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
-  }
-  else if (intent.type === "team") {
-    const messages = [
-      "Som quatre: Lucas (investigació), Sara (documentació), Ferran (experimentació) i Aitana (presentació). Un equip multidisciplinari.",
-      "L'equip està format per quatre persones amb rols ben definits: Lucas, Sara, Ferran i Aitana. Junts cobrim totes les àrees necessàries.",
-      "La nostra força radica en la diversitat de tasques: investigació, documentació, experiments i comunicació. Així avancem.",
-      "Un grup on cadascú té un paper únic i complementari. Això és treball en equip real."
-    ];
-    return randomIntro[Math.floor(Math.random() * randomIntro.length)] + messages[Math.floor(Math.random() * messages.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
-  }
-  else if (intent.type === "concept") {
-    const key = intent.entity;
-    const info = concepts[key] || "Aquest concepte està relacionat amb l'electromagnetisme d'alta freqüència. La bobina de Tesla n'és l'exemple més fascinant.";
-    const explanations = [
-      info + " Aquest fenomen el vam estudiar a fons i el demostrarem amb els experiments.",
-      info + " Et sembla increïble? Doncs espera a veure l'experiment en directe!",
-      info + " És un dels pilars del nostre treball al Sant Francesc."
-    ];
-    return base + explanations[Math.floor(Math.random() * explanations.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
-  }
-  else {
-    const fallbacks = [
-      "No ho sé exactament, però puc parlar-te de la ressonància, dels experiments o de l'equip. Què t'interessa més?",
-      "Hum, pregunta oberta! Si vols, pregunta'm sobre com funciona la bobina, la bombeta sense cables o els membres del nostre equip. T'ho explicaré de manera distinta cada vegada.",
-      "Ei! La meua especialitat és la bobina de Tesla, els seus principis i com l'equip del Sant Francesc l'ha feta realitat. Pregunta'm alguna cosa concreta."
-    ];
-    return fallbacks[Math.floor(Math.random() * fallbacks.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
-  }
-}
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorCanvas.style.transform = `translate(${mouseX - 24}px, ${mouseY - 24}px)`;
+  });
+  document.addEventListener('mouseleave', () => { cursorCanvas.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { cursorCanvas.style.opacity = '1'; });
+  cursorCanvas.style.opacity = '1';
 
-let conversationHistory = [];
-function addMsg(role, txt) {
-  const box = document.getElementById('cmsgs');
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  const mb = document.createElement('div');
-  mb.className = 'mb';
-  mb.textContent = txt;
-  div.appendChild(mb);
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
-}
-async function sendSmartMsg() {
-  const inp = document.getElementById('cin');
-  const msg = inp.value.trim();
-  if (!msg) return;
-  inp.value = '';
-  addMsg('user', msg);
-  conversationHistory.push(msg);
-  await new Promise(r => setTimeout(r, 30 + Math.random() * 60));
-  const reply = getSmartResponse(msg, conversationHistory);
-  addMsg('bot', reply);
-  conversationHistory.push(reply);
-  if (conversationHistory.length > 12) conversationHistory = conversationHistory.slice(-10);
-}
+  // ========== LLAMPS FRACTAL I SIMULADOR ==========
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+      this.beginPath();
+      this.moveTo(x+r,y); this.lineTo(x+w-r,y);
+      this.quadraticCurveTo(x+w,y,x+w,y+r);
+      this.lineTo(x+w,y+h-r);
+      this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      this.lineTo(x+r,y+h);
+      this.quadraticCurveTo(x,y+h,x,y+h-r);
+      this.lineTo(x,y+r);
+      this.quadraticCurveTo(x,y,x+r,y);
+      this.closePath();
+      return this;
+    };
+  }
+
+  function fractalBolt(x1,y1,x2,y2,spread,depth) {
+    if(depth===0) return [[x1,y1,x2,y2]];
+    const mx=(x1+x2)/2+(Math.random()-0.5)*spread;
+    const my=(y1+y2)/2+(Math.random()-0.5)*spread;
+    let segs = [...fractalBolt(x1,y1,mx,my,spread*0.55,depth-1), ...fractalBolt(mx,my,x2,y2,spread*0.55,depth-1)];
+    if(depth>1 && Math.random()>0.62) {
+      const ang=Math.atan2(y2-y1,x2-x1)+(Math.random()-0.5)*1.9;
+      const len=Math.hypot(x2-x1,y2-y1)*0.38;
+      segs.push(...fractalBolt(mx,my,mx+Math.cos(ang)*len,my+Math.sin(ang)*len,spread*0.32,depth-2));
+    }
+    return segs;
+  }
+
+  // HERO CANVAS (llamps interactius)
+  const heroCanvas = document.getElementById('heroCanvas');
+  const heroCtx = heroCanvas.getContext('2d');
+  let heroMX = -1000, heroMY = -1000, heroLightning=[], lightAlpha=0, lastBolt=0;
+  function resizeHero() { heroCanvas.width = window.innerWidth; heroCanvas.height = document.getElementById('hero').offsetHeight; }
+  resizeHero(); window.addEventListener('resize', resizeHero);
+  document.getElementById('hero').addEventListener('mousemove', (e) => {
+    const rect = heroCanvas.getBoundingClientRect();
+    heroMX = e.clientX - rect.left;
+    heroMY = e.clientY - rect.top;
+  });
+  document.getElementById('hero').addEventListener('mouseleave', () => { heroMX = -1000; });
+
+  function drawHeroCoil(ctx, cx, cy, w, h) {
+    const sc = Math.min(w,h)*0.0008;
+    ctx.beginPath(); ctx.ellipse(cx,cy,60*sc,22*sc,0,0,Math.PI*2); ctx.fillStyle='rgba(139,92,246,0.15)'; ctx.fill();
+    ctx.beginPath(); ctx.roundRect(cx-15*sc,cy+10*sc,30*sc,75*sc,4); ctx.fillStyle='#070714'; ctx.fill(); ctx.strokeStyle='#B45309'; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx,cy,45*sc,15*sc,0,0,Math.PI*2); ctx.fillStyle='#100640'; ctx.fill(); ctx.strokeStyle='#A855F7'; ctx.stroke();
+    return { tx: cx, ty: cy-12*sc };
+  }
+
+  let stars = Array.from({length:50},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-0.5)*0.0003,vy:(Math.random()-0.5)*0.0003,life:Math.random(),sz:0.6+Math.random()*1}));
+  function animateHero(t) {
+    requestAnimationFrame(animateHero);
+    const w=heroCanvas.width, h=heroCanvas.height;
+    heroCtx.clearRect(0,0,w,h);
+    stars.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.life+=0.003; if(p.life>1){ p.x=Math.random(); p.y=Math.random(); p.life=0; } heroCtx.beginPath(); heroCtx.arc(p.x*w,p.y*h,p.sz,0,Math.PI*2); heroCtx.fillStyle='#8B5CF6'; heroCtx.globalAlpha=Math.sin(p.life*Math.PI)*0.3; heroCtx.fill(); });
+    heroCtx.globalAlpha=1;
+    const cx=w/2, cy=h*0.56;
+    const {tx,ty}=drawHeroCoil(heroCtx,cx,cy,w,h);
+    if(heroMX>0 && Math.hypot(heroMX-cx,heroMY-cy)>80) {
+      if(t-lastBolt>70) { lastBolt=t; heroLightning=[]; lightAlpha=1; for(let i=0;i<3;i++) heroLightning.push(fractalBolt(tx,ty,heroMX+(Math.random()-0.5)*25,heroMY+(Math.random()-0.5)*25,75,5)); }
+      lightAlpha*=0.85;
+      heroLightning.forEach(bolt=>{ [['rgba(168,85,247,',2.5],['rgba(6,182,212,',1.2]].forEach(([col,lw])=>{ heroCtx.lineWidth=lw; bolt.forEach(seg=>{ heroCtx.beginPath(); heroCtx.moveTo(seg[0],seg[1]); heroCtx.lineTo(seg[2],seg[3]); heroCtx.strokeStyle=col+(lightAlpha*0.9)+')'; heroCtx.stroke(); }); }); });
+    }
+  }
+  requestAnimationFrame(animateHero);
+
+  // DEMO SIMULATOR
+  const demoCanvas = document.getElementById('demoCanvas');
+  const demoCtx = demoCanvas.getContext('2d');
+  let powered=false, power=0, freq=55, demoBolts=[], lastDemo=0, oscPhase=0;
+  function resizeDemo() { demoCanvas.width = demoCanvas.offsetWidth; demoCanvas.height = demoCanvas.offsetWidth*0.75; }
+  resizeDemo(); window.addEventListener('resize', resizeDemo);
+
+  function drawDemoCoil(ctx,cx,cy,sc) {
+    ctx.fillStyle='#020209'; ctx.fillRect(0,0,demoCanvas.width,demoCanvas.height);
+    ctx.beginPath(); ctx.roundRect(cx-13*sc,cy+9*sc,26*sc,72*sc,3); ctx.fillStyle='#06060F'; ctx.fill(); ctx.strokeStyle=powered?'#B45309':'#2A1A05'; ctx.stroke();
+    if(powered && power>0){ const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,55*sc); grad.addColorStop(0,`rgba(139,92,246,${power/120})`); ctx.beginPath(); ctx.ellipse(cx,cy,58*sc,20*sc,0,0,Math.PI*2); ctx.fillStyle=grad; ctx.fill(); }
+    ctx.beginPath(); ctx.ellipse(cx,cy,42*sc,14*sc,0,0,Math.PI*2); ctx.fillStyle='#100640'; ctx.fill(); ctx.strokeStyle=powered?'#A855F7':'#2A1A5A'; ctx.stroke();
+    return { tx:cx, ty:cy-14*sc };
+  }
+
+  function animateDemo(t) {
+    requestAnimationFrame(animateDemo);
+    const w=demoCanvas.width, h=demoCanvas.height, cx=w*0.5, cy=h*0.6, sc=Math.min(w,h)*0.01;
+    const {tx,ty}=drawDemoCoil(demoCtx,cx,cy,sc);
+    if(powered && power>0){
+      const rate=Math.max(30,80-freq/2);
+      if(t-lastDemo>rate){ lastDemo=t; demoBolts=[]; let nb=1+Math.floor(power/35); for(let i=0;i<nb;i++){ let ang=-Math.PI/2+(Math.random()-0.5)*1.2, len=(40+power)*sc*1.2; demoBolts.push(fractalBolt(tx,ty,tx+Math.cos(ang)*len+(Math.random()-0.5)*18,ty+Math.sin(ang)*len,(18+power*0.7)*sc,4)); } }
+      demoBolts.forEach(b=>{ b.forEach(seg=>{ demoCtx.lineWidth=2.5; demoCtx.beginPath(); demoCtx.moveTo(seg[0],seg[1]); demoCtx.lineTo(seg[2],seg[3]); demoCtx.strokeStyle='rgba(168,85,247,0.9)'; demoCtx.stroke(); }); });
+    }
+    const osc=document.getElementById('oscilloscope'), oscCtx=osc.getContext('2d'), ow=osc.offsetWidth||380, oh=55;
+    osc.width=ow; osc.height=oh; oscCtx.fillStyle='#000'; oscCtx.fillRect(0,0,ow,oh);
+    if(powered && power>0) oscPhase+=0.03+freq/300;
+    let amp=(powered && power>0)?(power/100)*18:1.5;
+    oscCtx.beginPath();
+    for(let x=0;x<ow;x++){ let y=oh/2+Math.sin(x*0.08*(freq/30)+oscPhase)*amp; x===0?oscCtx.moveTo(x,y):oscCtx.lineTo(x,y); }
+    oscCtx.strokeStyle=powered?'#22c55e':'#3b3b4f'; oscCtx.stroke();
+  }
+  requestAnimationFrame(animateDemo);
+
+  // Controls
+  const powerBtn=document.getElementById('powerBtn'), pSlider=document.getElementById('powerSlider'), fSlider=document.getElementById('freqSlider');
+  const pVal=document.getElementById('powerVal'), fVal=document.getElementById('freqVal'), statusSpan=document.getElementById('status'), voltSpan=document.getElementById('voltage'), ionSpan=document.getElementById('ionization');
+  function updateUI(){
+    if(powered){
+      powerBtn.textContent='◉ APAGAR'; powerBtn.classList.add('active');
+      pSlider.disabled=false; fSlider.disabled=false;
+      statusSpan.textContent='ACTIU'; ionSpan.textContent='ACTIU';
+    } else {
+      powerBtn.textContent='◉ ENCENDRE'; powerBtn.classList.remove('active');
+      pSlider.disabled=true; fSlider.disabled=true; pSlider.value=0; power=0;
+      pVal.textContent='0 kV'; voltSpan.textContent='--- kV'; statusSpan.textContent='APAGAT'; ionSpan.textContent='INACTIU'; fVal.textContent='— kHz';
+    }
+  }
+  function togglePower(){ powered=!powered; updateUI(); if(powered){ power=parseInt(pSlider.value); freq=parseInt(fSlider.value); upPow(power); upFreq(freq); } }
+  function upPow(v){ power=parseInt(v); let kv=power*2.5; pVal.textContent=kv.toFixed(0)+' kV'; voltSpan.textContent=kv.toFixed(0)+' kV'; }
+  function upFreq(v){ freq=parseInt(v); let khz=100+freq*12; fVal.textContent=khz.toFixed(0)+' kHz'; }
+  pSlider.oninput=(e)=>{ if(powered) upPow(e.target.value); };
+  fSlider.oninput=(e)=>{ if(powered) upFreq(e.target.value); };
+  powerBtn.onclick=togglePower; updateUI();
+
+  // Reveal scroll
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1});
+  reveals.forEach(r=>obs.observe(r));
+
+  // IA local
+  function getAIResponse(q){
+    const t=q.toLowerCase();
+    if(t.includes('lucas')) return "Lucas Jornet s'encarrega de la investigació teòrica. 🔍";
+    if(t.includes('sara')) return "Sara Gómez gestiona la documentació i les fonts. 📄";
+    if(t.includes('ferran')) return "Ferran Colomer fa el muntatge i l'operació de la bobina. ⚡";
+    if(t.includes('aitana')) return "Aitana Ruiz lidera la presentació i comunicació. 🎤";
+    if(t.includes('equip')||t.includes('grup')) return "L'equip el formen Lucas, Sara, Ferran i Aitana. Cada un amb un rol específic.";
+    if(t.includes('bombeta')) return "S'encén per inducció electromagnètica sense cables. El camp d'alta freqüència ionitza el gas interior. 💡";
+    if(t.includes('música')) return "Modulant la freqüència de les espurnes, l'aire vibra i genera notes musicals. 🎵";
+    if(t.includes('ressonància')) return "La ressonància permet transferir energia màxima entre bobines, produint altíssima tensió. 🔁";
+    return "Pregunta sobre la bobina, experiments, ressonància o membres de l'equip. T'ho explicaré! ⚡";
+  }
+  const chatMsgs=document.getElementById('chatMessages'), chatInp=document.getElementById('chatInput'), send=document.getElementById('sendBtn');
+  function addMsg(role,text){ let div=document.createElement('div'); div.className=`message ${role}`; let bubble=document.createElement('div'); bubble.className='bubble'; bubble.textContent=text; div.appendChild(bubble); chatMsgs.appendChild(div); chatMsgs.scrollTop=chatMsgs.scrollHeight; }
+  function sendMsg(){ let msg=chatInp.value.trim(); if(!msg) return; addMsg('user',msg); chatInp.value=''; setTimeout(()=>{ addMsg('bot',getAIResponse(msg)); },30); }
+  send.onclick=sendMsg; chatInp.addEventListener('keypress',e=>{if(e.key==='Enter')sendMsg();});
 </script>
 </body>
 </html>
