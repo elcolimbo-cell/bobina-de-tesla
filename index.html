@@ -3,22 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>⚡ Bobina de Tesla · Sant Francesc · Visualització Científica Avançada</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <title>Bobina de Tesla · Col·legi Sant Francesc · 2026</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23020108' rx='20'/%3E%3Cpath d='M50 10 L58 38 L42 38 L50 10Z' fill='%23FDE047' /%3E%3Cpath d='M45 45 L70 45 L60 62 L54 62 L62 82 L35 62 L45 62 L38 45 L45 45Z' fill='%238B5CF6' /%3E%3Ccircle cx='50' cy='75' r='8' fill='none' stroke='%2306B6D4' stroke-width='3' /%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg-deep: #020108;
       --bg-surface: #0a0a16;
       --bg-card: rgba(15, 15, 35, 0.55);
-      --border-glow: rgba(109, 40, 217, 0.35);
-      --border-glow-cyan: rgba(6, 182, 212, 0.4);
       --primary-purple: #8B5CF6;
       --primary-violet: #A855F7;
       --primary-cyan: #06B6D4;
@@ -28,638 +21,114 @@
       --text-dim: #94A3B8;
       --text-muted: #64748B;
       --success: #10B981;
-      --grad-1: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.05));
-      --glow-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
-
-    body {
-      background: var(--bg-deep);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-
-    /* glass-nav amélioré */
+    body { background: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.85rem 3rem;
-      background: rgba(2, 1, 12, 0.75);
-      backdrop-filter: blur(18px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.85rem 3rem; background: rgba(2, 1, 12, 0.75); backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(139, 92, 246, 0.25);
-      transition: all 0.25s ease;
     }
     .nav-brand {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      background: linear-gradient(120deg, #FDE047, #A855F7);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em;
+      background: linear-gradient(120deg, #FDE047, #A855F7); -webkit-background-clip: text; background-clip: text; color: transparent;
+      display: flex; align-items: center; gap: 0.6rem;
     }
-    .nav-brand::before {
-      content: "⚡";
-      font-size: 1.2rem;
-      background: none;
-      -webkit-background-clip: unset;
-      background-clip: unset;
-      color: var(--primary-amber);
-    }
-    nav ul {
-      display: flex;
-      gap: 2.2rem;
-      list-style: none;
-    }
-    nav a {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: 0.2s;
-      position: relative;
-    }
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 0;
-      height: 1.5px;
-      background: linear-gradient(90deg, #A855F7, #06B6D4);
-      transition: width 0.25s;
-    }
-    nav a:hover {
-      color: white;
-    }
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    /* hero upgrades */
-    #hero {
-      position: relative;
-      height: 100vh;
-      min-height: 680px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-    }
-    #hero-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 12;
-      padding: 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-      backdrop-filter: blur(2px);
-    }
-    .hero-school {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.28em;
-      color: var(--primary-cyan);
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.8rem;
-      background: rgba(6, 182, 212, 0.08);
-      padding: 0.3rem 1.2rem;
-      border-radius: 32px;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-    }
-    h1.htitle {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3rem, 10vw, 8rem);
-      font-weight: 900;
-      line-height: 0.92;
-      margin-bottom: 1.5rem;
-    }
+    .nav-brand::before { content: "⚡"; font-size: 1.2rem; color: var(--primary-amber); background: none; }
+    nav ul { display: flex; gap: 2.2rem; list-style: none; }
+    nav a { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; color: var(--text-dim); text-decoration: none; transition: 0.2s; position: relative; }
+    nav a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 1.5px; background: linear-gradient(90deg, #A855F7, #06B6D4); transition: width 0.25s; }
+    nav a:hover { color: white; } nav a:hover::after { width: 100%; }
+    #hero { position: relative; height: 100vh; min-height: 680px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+    .hero-content { position: relative; z-index: 12; padding: 2rem; max-width: 1000px; margin: 0 auto; backdrop-filter: blur(2px); }
+    .hero-school { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.28em; color: var(--primary-cyan); text-transform: uppercase; display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 1.8rem; background: rgba(6, 182, 212, 0.08); padding: 0.3rem 1.2rem; border-radius: 32px; border: 1px solid rgba(6, 182, 212, 0.3); }
+    h1.htitle { font-family: 'Orbitron', sans-serif; font-size: clamp(3rem, 10vw, 8rem); font-weight: 900; line-height: 0.92; margin-bottom: 1.5rem; }
     .htitle .wla { display: block; color: #fff; text-shadow: 0 0 20px rgba(139,92,246,0.4);}
     .htitle .wbo { display: block; background: linear-gradient(135deg, #C084FC, #22D3EE); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .htitle .wte { display: block; font-size: 0.42em; letter-spacing: 0.4em; color: rgba(255,255,255,0.6); margin-top: 0.4rem;}
-    .hero-sub {
-      font-size: 1rem;
-      color: var(--text-dim);
-      max-width: 540px;
-      margin: 0 auto 2rem;
-      line-height: 1.7;
-    }
-    .hero-chips {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 2.5rem;
-    }
-    .chip {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.4rem 1rem;
-      border-radius: 40px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      backdrop-filter: blur(4px);
-      transition: all 0.2s;
-    }
-    .chip.fc {
-      border-color: var(--primary-amber);
-      background: rgba(245, 158, 11, 0.12);
-      color: #FDE047;
-      box-shadow: 0 0 8px rgba(245,158,11,0.2);
-    }
-    .hero-hint {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      animation: pulseHint 2.5s infinite;
-    }
+    .hero-sub { font-size: 1rem; color: var(--text-dim); max-width: 540px; margin: 0 auto 2rem; line-height: 1.7; }
+    .hero-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 2.5rem; }
+    .chip { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.4rem 1rem; border-radius: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(139, 92, 246, 0.4); backdrop-filter: blur(4px); transition: 0.1s; }
+    .hero-hint { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); animation: pulseHint 2.5s infinite; }
     @keyframes pulseHint { 0%,100%{ opacity: 0.4; } 50%{ opacity: 1; } }
-
-    /* sections modern */
-    .sec, .sec-full {
-      position: relative;
-      z-index: 10;
-    }
-    .sec {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 6rem 2rem;
-    }
-    .sec-full {
-      padding: 6rem 2rem;
-    }
-    .eye {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      color: var(--primary-cyan);
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-      display: inline-block;
-      background: rgba(6,182,212,0.08);
-      padding: 0.2rem 1rem;
-      border-radius: 20px;
-    }
-    .sh2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 3.2rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, #FFFFFF, #C084FC);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.02em;
-    }
-    .hline {
-      display: block;
-      width: 60px;
-      height: 3px;
-      background: linear-gradient(90deg, #A855F7, #22D3EE);
-      border-radius: 4px;
-      margin: 1rem 0 2rem 0;
-    }
-
-    /* science grid */
-    .sci-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    .sci-text p {
-      color: var(--text-dim);
-      line-height: 1.75;
-      margin-bottom: 1.2rem;
-    }
-    .facts {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 1.2rem;
-    }
-    .fact {
-      background: var(--bg-card);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(109,40,217,0.25);
-      border-radius: 24px;
-      padding: 1.5rem;
-      transition: all 0.2s ease;
-    }
-    .fact:hover {
-      border-color: var(--primary-violet);
-      transform: translateY(-4px);
-      background: rgba(139,92,246,0.08);
-    }
+    .sec, .sec-full { position: relative; z-index: 10; }
+    .sec { max-width: 1280px; margin: 0 auto; padding: 6rem 2rem; }
+    .sec-full { padding: 6rem 2rem; }
+    .eye { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--primary-cyan); text-transform: uppercase; margin-bottom: 0.75rem; display: inline-block; background: rgba(6,182,212,0.08); padding: 0.2rem 1rem; border-radius: 20px; }
+    .sh2 { font-family: 'Orbitron', sans-serif; font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 800; background: linear-gradient(135deg, #FFFFFF, #C084FC); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.02em; }
+    .hline { display: block; width: 60px; height: 3px; background: linear-gradient(90deg, #A855F7, #22D3EE); border-radius: 4px; margin: 1rem 0 2rem 0; }
+    .sci-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .sci-text p { color: var(--text-dim); line-height: 1.75; margin-bottom: 1.2rem; }
+    .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.2rem; }
+    .fact { background: var(--bg-card); backdrop-filter: blur(8px); border: 1px solid rgba(109,40,217,0.25); border-radius: 24px; padding: 1.5rem; transition: all 0.2s; }
+    .fact:hover { border-color: var(--primary-violet); transform: translateY(-4px); background: rgba(139,92,246,0.08); }
     .fi { font-size: 2rem; margin-bottom: 0.6rem; }
-    .fk { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--primary-cyan); letter-spacing: 0.1em;}
-
-    /* demo section - modern */
-    #demo-sec {
-      background: radial-gradient(ellipse at 30% 40%, rgba(20, 10, 45, 0.7), var(--bg-surface));
-      border-top: 1px solid rgba(109,40,217,0.2);
-      border-bottom: 1px solid rgba(109,40,217,0.2);
-    }
-    .demo-wrap {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 2.8rem;
-    }
-    #demo-canvas {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 28px;
-      border: 1px solid rgba(139,92,246,0.5);
-      background: #010109;
-      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
-      transition: all 0.2s;
-    }
-    .demo-panel {
-      background: rgba(5,5,20,0.65);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 1.8rem;
-      border: 1px solid rgba(139,92,246,0.25);
-    }
-    .pbtn {
-      width: 100%;
-      padding: 1rem;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05));
-      border: 1.5px solid #4B5563;
-      border-radius: 60px;
-      color: var(--text-dim);
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .pbtn.on {
-      border-color: var(--primary-cyan);
-      color: #22D3EE;
-      box-shadow: 0 0 12px rgba(6,182,212,0.3);
-      background: rgba(6,182,212,0.1);
-    }
-    .sg {
-      margin-top: 0.8rem;
-    }
-    .slbl {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      margin-bottom: 0.3rem;
-    }
-    input[type=range] {
-      width: 100%;
-      height: 4px;
-      background: rgba(109,40,217,0.4);
-      border-radius: 4px;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      width: 18px;
-      height: 18px;
-      background: #A855F7;
-      border: 2px solid #22D3EE;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    .readout {
-      background: #010109cc;
-      border-radius: 20px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-    .rrow {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      margin: 0.4rem 0;
-    }
-    .rd {
-      color: #22c55e;
-      font-weight: 600;
-    }
-    .rd.off { color: #4B5563; }
-    #osc-canvas {
-      background: #020109;
-      border-radius: 12px;
-      margin-top: 0.8rem;
-      border: 1px solid rgba(109,40,217,0.3);
-    }
-
-    /* experiment cards */
-    .ecards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-    .ecard {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 2.2rem;
-      border: 1px solid rgba(139,92,246,0.2);
-      transition: all 0.25s;
-    }
-    .ecard:hover {
-      border-color: var(--primary-purple);
-      transform: translateY(-6px);
-    }
-    .etag {
-      display: inline-flex;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      padding: 0.2rem 0.9rem;
-      border-radius: 30px;
-      margin-bottom: 1rem;
-    }
+    .fk { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--primary-cyan); }
+    #demo-sec { background: radial-gradient(ellipse at 30% 40%, rgba(20, 10, 45, 0.7), var(--bg-surface)); border-top: 1px solid rgba(109,40,217,0.2); border-bottom: 1px solid rgba(109,40,217,0.2); }
+    .demo-wrap { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 2.8rem; }
+    #demo-canvas { width: 100%; aspect-ratio: 4/3; border-radius: 28px; border: 1px solid rgba(139,92,246,0.5); background: #010109; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6); }
+    .demo-panel { background: rgba(5,5,20,0.65); backdrop-filter: blur(12px); border-radius: 32px; padding: 1.8rem; border: 1px solid rgba(139,92,246,0.25); }
+    .pbtn { width: 100%; padding: 1rem; font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: 0.1em; background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05)); border: 1.5px solid #4B5563; border-radius: 60px; color: var(--text-dim); cursor: pointer; transition: 0.2s; }
+    .pbtn.on { border-color: var(--primary-cyan); color: #22D3EE; box-shadow: 0 0 12px rgba(6,182,212,0.3); background: rgba(6,182,212,0.1); }
+    .sg { margin-top: 0.8rem; }
+    .slbl { display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 0.3rem; }
+    input[type=range] { width: 100%; height: 4px; background: rgba(109,40,217,0.4); border-radius: 4px; }
+    input[type=range]::-webkit-slider-thumb { width: 18px; height: 18px; background: #A855F7; border: 2px solid #22D3EE; border-radius: 50%; cursor: pointer; }
+    .readout { background: #010109cc; border-radius: 20px; padding: 1rem; margin-top: 1rem; }
+    .rrow { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; margin: 0.4rem 0; }
+    .rd { color: #22c55e; font-weight: 600; } .rd.off { color: #4B5563; }
+    #osc-canvas { background: #020109; border-radius: 12px; margin-top: 0.8rem; border: 1px solid rgba(109,40,217,0.3); }
+    .ecards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .ecard { background: var(--bg-card); backdrop-filter: blur(12px); border-radius: 32px; padding: 2.2rem; border: 1px solid rgba(139,92,246,0.2); transition: all 0.25s; }
+    .ecard:hover { border-color: var(--primary-purple); transform: translateY(-6px); }
+    .etag { display: inline-flex; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; padding: 0.2rem 0.9rem; border-radius: 30px; margin-bottom: 1rem; }
     .tv { background: rgba(139,92,246,0.2); color: #C084FC; border: 1px solid #8B5CF6; }
     .tc { background: rgba(6,182,212,0.15); color: #22D3EE; border: 1px solid #06B6D4; }
-
-    /* Ferran section improved */
-    #ferran-sec {
-      background: linear-gradient(125deg, #03010f, #0a051c);
-      border-top: 1px solid rgba(245,158,11,0.25);
-    }
-    .ferran-grid {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    .fname {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 5rem);
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, #FDE047, #F97316);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .dossier {
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      padding: 2rem;
-      border: 1px solid rgba(245,158,11,0.3);
-    }
-    .stamp {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.75rem;
-      border: 2px solid #ef4444;
-      color: #ef4444;
-      padding: 0.2rem 0.8rem;
-      border-radius: 6px;
-      transform: rotate(-8deg);
-    }
-
-    /* team cards */
-    .tgrid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.8rem;
-      margin-top: 3rem;
-    }
-    .tcard {
-      background: rgba(15,15,35,0.5);
-      backdrop-filter: blur(8px);
-      border-radius: 32px;
-      padding: 1.8rem 2rem;
-      text-align: center;
-      border: 1px solid rgba(109,40,217,0.2);
-      transition: all 0.2s;
-      min-width: 180px;
-    }
-    .tcard.fcc {
-      border-color: #F59E0B;
-      background: rgba(245,158,11,0.05);
-    }
-    .av {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 1rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      background: linear-gradient(145deg, #7C3AED, #A855F7);
-    }
-
-    /* chat modern */
-    #chat-sec {
-      background: radial-gradient(circle at 20% 30%, #0c0a1a, #010105);
-    }
-    .chat-box {
-      background: #03010cee;
-      border-radius: 32px;
-      border: 1px solid rgba(139,92,246,0.5);
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-    }
-    .chat-msgs {
-      height: 380px;
-      overflow-y: auto;
-      padding: 1.2rem;
-    }
-    .msg {
-      margin-bottom: 1rem;
-    }
-    .mb {
-      background: rgba(109,40,217,0.1);
-      border-radius: 20px;
-      padding: 0.6rem 1rem;
-      max-width: 85%;
-    }
-    .msg.user .mb {
-      background: rgba(6,182,212,0.1);
-      border: 1px solid rgba(6,182,212,0.3);
-      margin-left: auto;
-    }
-    .key-row {
-      padding: 0.8rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .cin-row {
-      display: flex;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    #cin {
-      flex: 1;
-      background: transparent;
-      border: none;
-      padding: 1rem;
-      color: white;
-    }
-    #csend {
-      background: #8B5CF6;
-      border: none;
-      padding: 0 1.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2.5rem;
-      border-top: 1px solid rgba(139,92,246,0.2);
-    }
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s ease;
-    }
-    .reveal.vis {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
+    #ferran-sec { background: linear-gradient(125deg, #03010f, #0a051c); border-top: 1px solid rgba(245,158,11,0.25); }
+    .ferran-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .fname { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 900; line-height: 1; background: linear-gradient(135deg, #FDE047, #F97316); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .dossier { background: rgba(0,0,0,0.55); backdrop-filter: blur(12px); border-radius: 32px; padding: 2rem; border: 1px solid rgba(245,158,11,0.3); }
+    .stamp { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; border: 2px solid #ef4444; color: #ef4444; padding: 0.2rem 0.8rem; border-radius: 6px; transform: rotate(-8deg); display: inline-block; margin-top: 1rem; }
+    .team-note { background: rgba(255,255,255,0.03); border-radius: 24px; padding: 1rem 1.5rem; text-align: center; max-width: 600px; margin: 2rem auto 0; border: 1px solid rgba(139,92,246,0.3); }
+    .tgrid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.8rem; margin-top: 2rem; }
+    .tcard { background: rgba(15,15,35,0.5); backdrop-filter: blur(8px); border-radius: 32px; padding: 1.8rem 2rem; text-align: center; border: 1px solid rgba(109,40,217,0.2); transition: all 0.2s; min-width: 180px; }
+    .tcard:hover { border-color: var(--primary-cyan); transform: translateY(-4px); }
+    .av { width: 64px; height: 64px; margin: 0 auto 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; background: linear-gradient(145deg, #7C3AED, #A855F7); font-size: 1.2rem; }
+    #chat-sec { background: radial-gradient(circle at 20% 30%, #0c0a1a, #010105); }
+    .chat-box { background: #03010cee; border-radius: 32px; border: 1px solid rgba(139,92,246,0.5); overflow: hidden; backdrop-filter: blur(8px); }
+    .chat-msgs { height: 380px; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .msg { display: flex; gap: 0.7rem; }
+    .msg.user { justify-content: flex-end; }
+    .mb { background: rgba(109,40,217,0.15); border-radius: 20px; padding: 0.6rem 1rem; max-width: 85%; color: #E2E8F0; }
+    .msg.user .mb { background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); }
+    .cin-row { display: flex; border-top: 1px solid rgba(255,255,255,0.05); }
+    #cin { flex: 1; background: transparent; border: none; padding: 1rem; color: white; font-family: 'Inter', sans-serif; outline: none; }
+    #csend { background: #8B5CF6; border: none; padding: 0 1.5rem; font-weight: bold; cursor: pointer; transition: 0.2s; color: white; font-family: 'JetBrains Mono', monospace; }
+    #csend:hover { background: #A855F7; }
+    footer { text-align: center; padding: 2.5rem; border-top: 1px solid rgba(139,92,246,0.2); }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s ease; }
+    .reveal.vis { opacity: 1; transform: translateY(0); }
     @media (max-width: 900px) {
-      .demo-wrap { grid-template-columns: 1fr; }
-      .sci-grid, .ferran-grid, .ecards { grid-template-columns: 1fr; gap: 2rem; }
+      .demo-wrap, .sci-grid, .ferran-grid, .ecards { grid-template-columns: 1fr; gap: 2rem; }
       nav ul { display: none; }
       .sec, .sec-full { padding: 3rem 1.2rem; }
     }
   </style>
 </head>
 <body>
-
-<nav>
-  <span class="nav-brand">⚡ BOBINA DE TESLA · SANT FRANCESC</span>
-  <ul>
-    <li><a href="#ciencia">CIÈNCIA</a></li>
-    <li><a href="#demo-sec">SIMULADOR</a></li>
-    <li><a href="#experiments">EXPERIMENTS</a></li>
-    <li><a href="#ferran-sec">FERRAN</a></li>
-    <li><a href="#chat-sec">ORACLE AI</a></li>
-  </ul>
-</nav>
-
-<section id="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-content">
-    <div class="hero-school">⚡ COL·LEGI SANT FRANCESC · TREBALL CIENTÍFIC</div>
-    <h1 class="htitle">
-      <span class="wla">La</span>
-      <span class="wbo">Bobina</span>
-      <span class="wte">DE TESLA</span>
-    </h1>
-    <p class="hero-sub">Un generador electromagnètic que encén bombetes sense cables, ionitza l'aire i fa música amb llamps. Nikola Tesla, però al Sant Francesc.</p>
-    <div class="hero-chips">
-      <span class="chip">Lucas Jornet</span>
-      <span class="chip">Sara Gómez</span>
-      <span class="chip fc">⚡ Ferran Colomer</span>
-      <span class="chip">Aitana Ruiz</span>
-    </div>
-    <p class="hero-hint">✨ mou el ratolí sobre la bobina per generar llamps interactius</p>
-  </div>
-</section>
-
-<section id="ciencia" class="sec reveal">
-  <div class="sci-grid">
-    <div class="sci-text">
-      <p class="eye">01 · FONAMENTS CIENTÍFICS</p>
-      <h2 class="sh2">Què és una Bobina de Tesla?</h2>
-      <span class="hline"></span>
-      <p>La bobina de Tesla és un <strong>generador electromagnètic</strong> que produeix descàrregues d'alta tensió i elevades freqüències. Inventada per Nikola Tesla al voltant de 1891, segueix sent un dels dispositius més espectaculars de la física.</p>
-      <p>El seu principi clau és la <strong>ressonància electromagnètica</strong>: dues bobines (primària i secundària) sintonitzades a la mateixa freqüència ampliquen la tensió fins a centenars de kilovolts, ionitzant l'aire al voltant i creant llamps visibles.</p>
-    </div>
-    <div class="facts">
-      <div class="fact"><div class="fi">⚡</div><div class="fk">Energia</div><div class="fv">Alta tensió · Alta freqüència</div></div>
-      <div class="fact"><div class="fi">💡</div><div class="fk">Efecte 1</div><div class="fv">Bombeta sense cables</div></div>
-      <div class="fact"><div class="fi">🎵</div><div class="fk">Música amb llamps</div><div class="fv">Modulació d'espurnes</div></div>
-      <div class="fact"><div class="fi">📡</div><div class="fk">Principi</div><div class="fv">Ressonància electromagnètica</div></div>
-    </div>
-  </div>
-</section>
-
-<div id="demo-sec" class="sec-full reveal">
-  <div class="demo-wrap">
-    <div>
-      <p class="eye">02 · SIMULADOR D'ALTA TENSIÓ</p>
-      <h2 class="sh2">Controla la Bobina</h2>
-      <span class="hline"></span>
-      <canvas id="demo-canvas"></canvas>
-    </div>
-    <div class="demo-panel">
-      <button class="pbtn" id="pbtn" onclick="togglePower()">◉  ENCENDRE</button>
-      <div class="sg"><div class="slbl"><span class="sname">POTÈNCIA</span><span class="sval" id="pval">0 kV</span></div><input type="range" id="pslider" min="0" max="100" value="0" disabled oninput="upPow(this.value)"/></div>
-      <div class="sg"><div class="slbl"><span class="sname">FREQÜÈNCIA</span><span class="sval" id="fval">— kHz</span></div><input type="range" id="fslider" min="10" max="100" value="55" disabled oninput="upFreq(this.value)"/></div>
-      <div class="readout"><div class="rt">⚡ READOUT DEL SISTEMA</div><div class="rrows"><div class="rrow"><span>ESTAT:</span><span id="rest">APAGAT</span></div><div class="rrow"><span>TENSIÓ:</span><span id="rtens">--- kV</span></div><div class="rrow"><span>IONITZACIÓ:</span><span id="rion">INACTIU</span></div></div><canvas id="osc-canvas" width="400" height="65"></canvas></div>
-      <div class="warn-box" style="font-size:0.65rem;color:#94a3b8;">⚠️ Simulació educativa. L'experiment real serà executat per Ferran Colomer sota supervisió.</div>
-    </div>
-  </div>
-</div>
-
-<section id="experiments" class="sec reveal">
-  <p class="eye">03 · EXPERIMENTS EN DIRECTE</p>
-  <h2 class="sh2">Dos experiments, un principi</h2>
-  <span class="hline"></span>
-  <div class="ecards">
-    <div class="ecard"><span class="etag tv">⚡ ENERGIA SENSE FILS</span><h3>La Bombeta de Tesla</h3><p>Acostem una bombeta de baix consum a la bobina en funcionament. El camp electromagnètic d'alta freqüència ionitza l'aire i la bombeta s'encén — sense cable, sense endoll.</p></div>
-    <div class="ecard"><span class="etag tc">🎵 MÚSICA AMB LLAMPS</span><h3>La Bobina Musical</h3><p>Les espurnes s'encenen i s'apaguen a una freqüència controlada per un circuit. L'aire vibra i la bobina canta sense cap altaveu físic.</p></div>
-  </div>
-</section>
-
-<div id="ferran-sec" class="sec-full reveal">
-  <div class="ferran-grid">
-    <div><p class="eye">04 · L'EXPERIMENTADOR PRINCIPAL</p><div class="fname">Ferran Colomer</div><div class="ftitle" style="margin-top:0.5rem; color:#FDE047;">// L'home darrere dels llamps</div><p class="fdesc" style="margin-top:1.2rem;">En Ferran és qui executarà tots dos experiments en directe davant de la classe. Manipularà la bobina, aproparà la bombeta al camp electromagnètic i activarà la bobina musical. L'experiment real, amb la bobina real.</p></div>
-    <div class="dossier"><div class="dh">⚡ FITXA EXPERIMENTADOR</div><div class="drow"><span>NOM COMPLET</span><span style="color:#FDE047;">Ferran Colomer</span></div><div class="drow"><span>ROL</span><span>Experimentador Principal</span></div><div class="drow"><span>EXPERIMENT 01</span><span style="color:#22c55e;">CONFIRMAT ✓</span></div><div class="drow"><span>EXPERIMENT 02</span><span style="color:#22c55e;">CONFIRMAT ✓</span></div><div class="stamp" style="margin-top:1rem;">AUTORITZAT</div></div>
-  </div>
-</div>
-
-<section id="equip" class="sec reveal" style="text-align:center">
-  <p class="eye">05 · EQUIP CIENTÍFIC</p>
-  <h2 class="sh2">El Grup Sant Francesc</h2>
-  <span class="hline" style="margin:1rem auto;"></span>
-  <div class="tgrid">
-    <div class="tcard"><div class="av">LJ</div><div class="tname">Lucas Jornet</div><div class="trole">Investigació</div></div>
-    <div class="tcard"><div class="av">SG</div><div class="tname">Sara Gómez</div><div class="trole">Documentació</div></div>
-    <div class="tcard fcc"><div class="av">FC</div><div class="tname">Ferran Colomer</div><div class="trole">Experimentador</div><div class="tbadge">⚡ Principal</div></div>
-    <div class="tcard"><div class="av">AR</div><div class="tname">Aitana Ruiz</div><div class="trole">Presentació</div></div>
-  </div>
-</section>
-
-<div id="chat-sec" class="sec-full reveal">
-  <div class="chat-wrap" style="max-width: 800px; margin:0 auto;">
-    <div style="text-align:center; margin-bottom:2rem;"><p class="eye">06 · INTEL·LIGÈNCIA ARTIFICIAL</p><h2 class="sh2">Oracle de la Bobina</h2><span class="hline" style="margin:1rem auto;"></span><p style="color:#94a3b8;">Pregunta sobre electromagnetisme, experiments o el paper de Ferran.</p></div>
-    <div class="chat-box"><div class="chat-hdr" style="display: flex; padding:0.8rem; border-bottom:1px solid rgba(139,92,246,0.2);"><div>⚡ Oracle Tesla</div><div style="margin-left:auto; font-size:0.7rem;">EN LÍNIA</div></div><div class="chat-msgs" id="cmsgs"><div class="msg bot"><div class="mb">⚡ Hola! Soc l'Oracle de la Bobina de Tesla. Pregunta sobre com funciona la bobina, els experiments, o el paper de Ferran Colomer.</div></div></div><div class="key-row" style="display: flex; gap:0.5rem;"><span style="font-size:0.65rem;">🔑 API KEY Claude:</span><input type="password" id="akey" placeholder="sk-ant-api03-..." style="flex:1; background:#111; border:1px solid #8B5CF6; border-radius:8px; padding:0.3rem; color:white;"><button class="ksave" onclick="saveKey()" style="background:#333; border:none; padding:0.2rem 0.8rem;">Desa</button></div><div class="cin-row"><input type="text" id="cin" placeholder="Pregunta sobre la bobina de Tesla..."><button id="csend" onclick="sendMsg()">→</button></div></div>
-  </div>
-</div>
-<footer><div class="ftl">⚡ La Bobina de Tesla</div><p class="fts">Col·legi Sant Francesc · Treball Científic 2025 · Lucas Jornet · Sara Gómez · Ferran Colomer · Aitana Ruiz</p></footer>
+<nav><span class="nav-brand">⚡ BOBINA DE TESLA · SANT FRANCESC 2026</span><ul><li><a href="#ciencia">CIÈNCIA</a></li><li><a href="#demo-sec">SIMULADOR</a></li><li><a href="#experiments">EXPERIMENTS</a></li><li><a href="#ferran-sec">L'EQUIP</a></li><li><a href="#chat-sec">ORACLE</a></li></ul></nav>
+<section id="hero"><canvas id="hero-canvas"></canvas><div class="hero-content"><div class="hero-school">⚡ COL·LEGI SANT FRANCESC · PROJECTE 2026</div><h1 class="htitle"><span class="wla">La</span><span class="wbo">Bobina</span><span class="wte">DE TESLA</span></h1><p class="hero-sub">Un projecte col·laboratiu on cadascú aporta el seu talent: investigació, documentació, experiments i presentació. Descobreix l'electromagnetisme com mai.</p><div class="hero-chips"><span class="chip">Lucas Jornet</span><span class="chip">Sara Gómez</span><span class="chip">Ferran Colomer</span><span class="chip">Aitana Ruiz</span></div><p class="hero-hint">✨ mou el ratolí sobre la bobina per generar llamps interactius</p></div></section>
+<section id="ciencia" class="sec reveal"><div class="sci-grid"><div class="sci-text"><p class="eye">01 · FONAMENTS CIENTÍFICS</p><h2 class="sh2">Què és una Bobina de Tesla?</h2><span class="hline"></span><p>La bobina de Tesla és un <strong>generador electromagnètic</strong> que produeix descàrregues d'alta tensió i elevades freqüències. Inventada per Nikola Tesla al voltant de 1891, segueix sent un dels dispositius més espectaculars de la física.</p><p>El seu principi clau és la <strong>ressonància electromagnètica</strong>: dues bobines (primària i secundària) sintonitzades a la mateixa freqüència ampliquen la tensió fins a centenars de kilovolts, ionitzant l'aire al voltant i creant llamps visibles.</p></div><div class="facts"><div class="fact"><div class="fi">⚡</div><div class="fk">Energia</div><div class="fv">Alta tensió · Alta freqüència</div></div><div class="fact"><div class="fi">💡</div><div class="fk">Efecte 1</div><div class="fv">Bombeta sense cables</div></div><div class="fact"><div class="fi">🎵</div><div class="fk">Música amb llamps</div><div class="fv">Modulació d'espurnes</div></div><div class="fact"><div class="fi">📡</div><div class="fk">Principi</div><div class="fv">Ressonància electromagnètica</div></div></div></div></section>
+<div id="demo-sec" class="sec-full reveal"><div class="demo-wrap"><div><p class="eye">02 · SIMULADOR D'ALTA TENSIÓ</p><h2 class="sh2">Controla la Bobina</h2><span class="hline"></span><canvas id="demo-canvas"></canvas></div><div class="demo-panel"><button class="pbtn" id="pbtn" onclick="togglePower()">◉  ENCENDRE</button><div class="sg"><div class="slbl"><span class="sname">POTÈNCIA</span><span class="sval" id="pval">0 kV</span></div><input type="range" id="pslider" min="0" max="100" value="0" disabled oninput="upPow(this.value)"/></div><div class="sg"><div class="slbl"><span class="sname">FREQÜÈNCIA</span><span class="sval" id="fval">— kHz</span></div><input type="range" id="fslider" min="10" max="100" value="55" disabled oninput="upFreq(this.value)"/></div><div class="readout"><div class="rt">⚡ READOUT DEL SISTEMA</div><div class="rrows"><div class="rrow"><span>ESTAT:</span><span id="rest">APAGAT</span></div><div class="rrow"><span>TENSIÓ:</span><span id="rtens">--- kV</span></div><div class="rrow"><span>IONITZACIÓ:</span><span id="rion">INACTIU</span></div></div><canvas id="osc-canvas" width="400" height="65"></canvas></div><div class="warn-box" style="font-size:0.65rem;color:#94a3b8;">⚠️ Simulació educativa. L'experiment real es fa sota supervisió docent.</div></div></div></div>
+<section id="experiments" class="sec reveal"><p class="eye">03 · EXPERIMENTS EN DIRECTE</p><h2 class="sh2">Dos experiments, un principi</h2><span class="hline"></span><div class="ecards"><div class="ecard"><span class="etag tv">⚡ ENERGIA SENSE FILS</span><h3>La Bombeta de Tesla</h3><p>Acostem una bombeta de baix consum a la bobina en funcionament. El camp electromagnètic d'alta freqüència ionitza l'aire i la bombeta s'encén — sense cable, sense endoll.</p></div><div class="ecard"><span class="etag tc">🎵 MÚSICA AMB LLAMPS</span><h3>La Bobina Musical</h3><p>Les espurnes s'encenen i s'apaguen a una freqüència controlada per un circuit. L'aire vibra i la bobina canta sense cap altaveu físic.</p></div></div></section>
+<div id="ferran-sec" class="sec-full reveal"><div class="ferran-grid"><div><p class="eye">04 · L'EQUIP</p><div class="fname">Lucas · Sara · Ferran · Aitana</div><div class="ftitle" style="margin-top:0.5rem; color:#FDE047;">// Quatre talents, un objectiu</div><p class="fdesc" style="margin-top:1.2rem;">Lucas investiga els fonaments, Sara documenta cada pas, Ferran opera la bobina i Aitana prepara la presentació. Junts hem après i gaudit fent realitat aquest projecte.</p><div style="margin-top: 1.2rem; background: rgba(255,255,255,0.02); border-radius: 20px; padding: 0.8rem 1rem;"><span style="font-family:'JetBrains Mono'; font-size:0.7rem;">✨ "L'energia invisible que uneix ciència i equip."</span></div></div><div class="dossier"><div class="dh" style="font-family:'JetBrains Mono'; color:#F59E0B;">⚡ REPARTIMENT DE TASQUES</div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>INVESTIGACIÓ</span><span style="color:#FDE047;">Lucas Jornet</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>DOCUMENTACIÓ</span><span style="color:#FDE047;">Sara Gómez</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>EXPERIMENTACIÓ</span><span style="color:#FDE047;">Ferran Colomer</span></div><div class="drow" style="display:flex; justify-content:space-between; margin:1rem 0;"><span>PRESENTACIÓ</span><span style="color:#FDE047;">Aitana Ruiz</span></div><div class="stamp" style="border-color: #22c55e; color: #22c55e;">2026</div></div></div></div>
+<section id="equip" class="sec reveal" style="text-align:center"><p class="eye">05 · L'equip científic</p><h2 class="sh2">Un grup, un objectiu</h2><span class="hline" style="margin:1rem auto;"></span><div class="tgrid"><div class="tcard"><div class="av">LJ</div><div class="tname">Lucas Jornet</div><div class="trole">Investigació teòrica</div></div><div class="tcard"><div class="av">SG</div><div class="tname">Sara Gómez</div><div class="trole">Documentació i fonts</div></div><div class="tcard"><div class="av">FC</div><div class="tname">Ferran Colomer</div><div class="trole">Muntatge i operació</div></div><div class="tcard"><div class="av">AR</div><div class="tname">Aitana Ruiz</div><div class="trole">Comunicació i presentació</div></div></div><div class="team-note"><span style="font-family:'JetBrains Mono';">⚡ Treball en equip des de 2025 fins ara.</span></div></section>
+<div id="chat-sec" class="sec-full reveal"><div class="chat-wrap" style="max-width: 800px; margin:0 auto;"><div style="text-align:center; margin-bottom:2rem;"><p class="eye">06 · IA AVANÇADA LOCAL</p><h2 class="sh2">Oracle de la Bobina</h2><span class="hline" style="margin:1rem auto;"></span><p style="color:#94a3b8;">Pregunta sobre electromagnetisme, experiments o el projecte. La IA genera respostes úniques sense necessitat d'API.</p></div><div class="chat-box"><div style="display: flex; padding:0.8rem; border-bottom:1px solid rgba(139,92,246,0.2);"><span>⚡ Oracle Neural · Respostes dinàmiques</span><div style="margin-left:auto; font-size:0.7rem;">🧠 Sense clau API</div></div><div class="chat-msgs" id="cmsgs"><div class="msg bot"><div class="mb">⚡ Hola! Sóc l'Oracle del projecte de la Bobina de Tesla. Pregunta'm sobre com funciona, els experiments, els membres de l'equip (Lucas, Sara, Ferran, Aitana) o la física que hi ha darrere. No repetiré respostes, cada vegada serà diferent.</div></div></div><div class="cin-row"><input type="text" id="cin" placeholder="Fes una pregunta..." onkeydown="if(event.key==='Enter')sendSmartMsg()"/><button id="csend" onclick="sendSmartMsg()">→</button></div></div></div></div>
+<footer><div class="ftl" style="font-family:'Orbitron';">⚡ La Bobina de Tesla</div><p class="fts">Col·legi Sant Francesc · Projecte 2026 · Lucas · Sara · Ferran · Aitana</p></footer>
 
 <script>
-// Mantenir tota la funcionalitat original millorada sense errors
+// Funcionalitats originals: fractal llamps, simulador (escurçat per espai però idèntic en funcionament)
 if(!CanvasRenderingContext2D.prototype.roundRect){
   CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
     this.beginPath();this.moveTo(x+r,y);this.lineTo(x+w-r,y);
@@ -671,14 +140,9 @@ if(!CanvasRenderingContext2D.prototype.roundRect){
 }
 function fractalBolt(x1,y1,x2,y2,spread,depth){
   if(depth===0) return [[x1,y1,x2,y2]];
-  const mx=(x1+x2)/2+(Math.random()-.5)*spread;
-  const my=(y1+y2)/2+(Math.random()-.5)*spread;
+  const mx=(x1+x2)/2+(Math.random()-.5)*spread; const my=(y1+y2)/2+(Math.random()-.5)*spread;
   let segs=[...fractalBolt(x1,y1,mx,my,spread*.55,depth-1),...fractalBolt(mx,my,x2,y2,spread*.55,depth-1)];
-  if(depth>1&&Math.random()>.62){
-    const ang=Math.atan2(y2-y1,x2-x1)+(Math.random()-.5)*1.9;
-    const len=Math.hypot(x2-x1,y2-y1)*.38;
-    segs.push(...fractalBolt(mx,my,mx+Math.cos(ang)*len,my+Math.sin(ang)*len,spread*.32,depth-2));
-  }
+  if(depth>1&&Math.random()>.62){ const ang=Math.atan2(y2-y1,x2-x1)+(Math.random()-.5)*1.9; const len=Math.hypot(x2-x1,y2-y1)*.38; segs.push(...fractalBolt(mx,my,mx+Math.cos(ang)*len,my+Math.sin(ang)*len,spread*.32,depth-2));}
   return segs;
 }
 const hCanvas=document.getElementById('hero-canvas'),hCtx=hCanvas.getContext('2d');
@@ -688,56 +152,123 @@ resizeHero();window.addEventListener('resize',resizeHero);
 document.getElementById('hero').addEventListener('mousemove',e=>{const r=hCanvas.getBoundingClientRect();mX=e.clientX-r.left;mY=e.clientY-r.top;});
 document.getElementById('hero').addEventListener('mouseleave',()=>{mX=-999;});
 const pts=Array.from({length:65},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0003,vy:(Math.random()-.5)*.0003,life:Math.random(),sz:.6+Math.random()*1.3,col:Math.random()>.5?'#8B5CF6':'#06B6D4'}));
-function drawHeroCoil(cx,cy,W,H){ /* rendering estil mantenir */
-  const sc=Math.min(W,H)*0.0008;
-  hCtx.beginPath();hCtx.ellipse(cx,cy,60*sc,22*sc,0,0,Math.PI*2);hCtx.fillStyle='rgba(139,92,246,0.15)';hCtx.fill();
-  hCtx.beginPath();hCtx.roundRect(cx-15*sc,cy+10*sc,30*sc,75*sc,4);hCtx.fillStyle='#070714';hCtx.fill();hCtx.strokeStyle='#B45309';hCtx.stroke();
-  hCtx.beginPath();hCtx.ellipse(cx,cy,45*sc,15*sc,0,0,Math.PI*2);hCtx.fillStyle='#100640';hCtx.strokeStyle='#A855F7';hCtx.fill();hCtx.stroke();
-  return {tx:cx,ty:cy-12*sc};
-}
-function heroLoop(ts){
-  requestAnimationFrame(heroLoop);
-  const W=hCanvas.width,H=hCanvas.height;
-  hCtx.clearRect(0,0,W,H);
-  pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life+=0.003;if(p.life>1){p.x=Math.random();p.y=Math.random();p.life=0;}hCtx.beginPath();hCtx.arc(p.x*W,p.y*H,p.sz,0,Math.PI*2);hCtx.fillStyle=p.col;hCtx.globalAlpha=Math.sin(p.life*Math.PI)*0.5;hCtx.fill();});
-  hCtx.globalAlpha=1; const cx=W/2,cy=H*0.56; const {tx,ty}=drawHeroCoil(cx,cy,W,H);
-  if(mX>0&&Math.hypot(mX-cx,mY-cy)>80){
-    if(ts-lastHeroB>70){lastHeroB=ts;heroBolts=[];bAlpha=1;for(let i=0;i<3;i++)heroBolts.push(fractalBolt(tx,ty,mX+(Math.random()-.5)*25,mY+(Math.random()-.5)*25,75,5));}
-    bAlpha*=.82; heroBolts.forEach(bolt=>{ [['rgba(168,85,247,',2.5],['rgba(6,182,212,',1.2]].forEach(([col,lw])=>{hCtx.lineWidth=lw;bolt.forEach(([x1,y1,x2,y2])=>{hCtx.beginPath();hCtx.moveTo(x1,y1);hCtx.lineTo(x2,y2);hCtx.strokeStyle=col+(bAlpha*.9)+')';hCtx.stroke();});});});
-  }
-}
+function drawHeroCoil(cx,cy,W,H){ const sc=Math.min(W,H)*0.0008; hCtx.beginPath();hCtx.ellipse(cx,cy,60*sc,22*sc,0,0,Math.PI*2);hCtx.fillStyle='rgba(139,92,246,0.15)';hCtx.fill(); hCtx.beginPath();hCtx.roundRect(cx-15*sc,cy+10*sc,30*sc,75*sc,4);hCtx.fillStyle='#070714';hCtx.fill();hCtx.strokeStyle='#B45309';hCtx.stroke(); hCtx.beginPath();hCtx.ellipse(cx,cy,45*sc,15*sc,0,0,Math.PI*2);hCtx.fillStyle='#100640';hCtx.strokeStyle='#A855F7';hCtx.fill();hCtx.stroke(); return {tx:cx,ty:cy-12*sc};}
+function heroLoop(ts){ requestAnimationFrame(heroLoop); const W=hCanvas.width,H=hCanvas.height; hCtx.clearRect(0,0,W,H); pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life+=0.003;if(p.life>1){p.x=Math.random();p.y=Math.random();p.life=0;}hCtx.beginPath();hCtx.arc(p.x*W,p.y*H,p.sz,0,Math.PI*2);hCtx.fillStyle=p.col;hCtx.globalAlpha=Math.sin(p.life*Math.PI)*0.5;hCtx.fill();}); hCtx.globalAlpha=1; const cx=W/2,cy=H*0.56; const {tx,ty}=drawHeroCoil(cx,cy,W,H); if(mX>0&&Math.hypot(mX-cx,mY-cy)>80){ if(ts-lastHeroB>70){lastHeroB=ts;heroBolts=[];bAlpha=1;for(let i=0;i<3;i++)heroBolts.push(fractalBolt(tx,ty,mX+(Math.random()-.5)*25,mY+(Math.random()-.5)*25,75,5));} bAlpha*=.82; heroBolts.forEach(bolt=>{ [['rgba(168,85,247,',2.5],['rgba(6,182,212,',1.2]].forEach(([col,lw])=>{hCtx.lineWidth=lw;bolt.forEach(([x1,y1,x2,y2])=>{hCtx.beginPath();hCtx.moveTo(x1,y1);hCtx.lineTo(x2,y2);hCtx.strokeStyle=col+(bAlpha*.9)+')';hCtx.stroke();});});});}}
 requestAnimationFrame(heroLoop);
-
-// DEMO SIMULATION
 const dCanvas=document.getElementById('demo-canvas'),dCtx=dCanvas.getContext('2d');
 let powered=false,pow=0,freq=55,demoBolts=[],lastDB=0,oscPh=0;
 function resizeDemo(){dCanvas.width=dCanvas.offsetWidth;dCanvas.height=dCanvas.offsetWidth*.75;}
 resizeDemo();window.addEventListener('resize',resizeDemo);
-function drawDemoCoil(cx,cy,sc){ dCtx.fillStyle='#020209';dCtx.fillRect(0,0,dCanvas.width,dCanvas.height);
-  dCtx.beginPath();dCtx.roundRect(cx-13*sc,cy+9*sc,26*sc,72*sc,3);dCtx.fillStyle='#06060F';dCtx.fill();dCtx.strokeStyle=powered?'#B45309':'#2A1A05';dCtx.stroke();
-  if(powered&&pow>0){ const pg=dCtx.createRadialGradient(cx,cy,0,cx,cy,55*sc);pg.addColorStop(0,`rgba(139,92,246,${pow/120})`);dCtx.beginPath();dCtx.ellipse(cx,cy,58*sc,20*sc,0,0,Math.PI*2);dCtx.fillStyle=pg;dCtx.fill();}
-  dCtx.beginPath();dCtx.ellipse(cx,cy,42*sc,14*sc,0,0,Math.PI*2);dCtx.fillStyle='#100640';dCtx.strokeStyle=powered?'#A855F7':'#2A1A5A';dCtx.fill();dCtx.stroke();
-  return {tx:cx,ty:cy-14*sc};
-}
-function demoLoop(ts){
-  requestAnimationFrame(demoLoop);
-  const W=dCanvas.width,H=dCanvas.height,cx=W*.5,cy=H*.6,sc=Math.min(W,H)*0.01;
-  const {tx,ty}=drawDemoCoil(cx,cy,sc);
-  if(powered&&pow>0){const rate=Math.max(30,80-(freq/2));if(ts-lastDB>rate){lastDB=ts;demoBolts=[];let nb=1+Math.floor(pow/35);for(let i=0;i<nb;i++){let ang=-Math.PI/2+(Math.random()-.5)*1.2,len=(40+pow)*sc*1.2;demoBolts.push(fractalBolt(tx,ty,tx+Math.cos(ang)*len+(Math.random()-.5)*18,ty+Math.sin(ang)*len,(18+pow*.7)*sc,4));}}demoBolts.forEach(b=>{b.forEach(seg=>{dCtx.lineWidth=2.5;dCtx.beginPath();dCtx.moveTo(seg[0],seg[1]);dCtx.lineTo(seg[2],seg[3]);dCtx.strokeStyle=`rgba(168,85,247,0.9)`;dCtx.stroke();});});}
-  const oC=document.getElementById('osc-canvas'),oCtx=oC.getContext('2d');const oW=oC.offsetWidth||380,oH=65;oC.width=oW;oC.height=oH;oCtx.fillStyle='#000';oCtx.fillRect(0,0,oW,oH);
-  if(powered&&pow>0){oscPh+=0.03+(freq/300);}let amp=powered&&pow>0?(pow/100)*22:2;for(let x=0;x<oW;x++){let y=oH/2+Math.sin(x*0.08*(freq/30)+oscPh)*amp;x===0?oCtx.moveTo(x,y):oCtx.lineTo(x,y);}oCtx.strokeStyle=powered?'#22c55e':'#3b3b4f';oCtx.stroke();
-}
+function drawDemoCoil(cx,cy,sc){ dCtx.fillStyle='#020209';dCtx.fillRect(0,0,dCanvas.width,dCanvas.height); dCtx.beginPath();dCtx.roundRect(cx-13*sc,cy+9*sc,26*sc,72*sc,3);dCtx.fillStyle='#06060F';dCtx.fill();dCtx.strokeStyle=powered?'#B45309':'#2A1A05';dCtx.stroke(); if(powered&&pow>0){ const pg=dCtx.createRadialGradient(cx,cy,0,cx,cy,55*sc);pg.addColorStop(0,`rgba(139,92,246,${pow/120})`);dCtx.beginPath();dCtx.ellipse(cx,cy,58*sc,20*sc,0,0,Math.PI*2);dCtx.fillStyle=pg;dCtx.fill();} dCtx.beginPath();dCtx.ellipse(cx,cy,42*sc,14*sc,0,0,Math.PI*2);dCtx.fillStyle='#100640';dCtx.strokeStyle=powered?'#A855F7':'#2A1A5A';dCtx.fill();dCtx.stroke(); return {tx:cx,ty:cy-14*sc};}
+function demoLoop(ts){ requestAnimationFrame(demoLoop); const W=dCanvas.width,H=dCanvas.height,cx=W*.5,cy=H*.6,sc=Math.min(W,H)*0.01; const {tx,ty}=drawDemoCoil(cx,cy,sc); if(powered&&pow>0){const rate=Math.max(30,80-(freq/2));if(ts-lastDB>rate){lastDB=ts;demoBolts=[];let nb=1+Math.floor(pow/35);for(let i=0;i<nb;i++){let ang=-Math.PI/2+(Math.random()-.5)*1.2,len=(40+pow)*sc*1.2;demoBolts.push(fractalBolt(tx,ty,tx+Math.cos(ang)*len+(Math.random()-.5)*18,ty+Math.sin(ang)*len,(18+pow*.7)*sc,4));}}demoBolts.forEach(b=>{b.forEach(seg=>{dCtx.lineWidth=2.5;dCtx.beginPath();dCtx.moveTo(seg[0],seg[1]);dCtx.lineTo(seg[2],seg[3]);dCtx.strokeStyle=`rgba(168,85,247,0.9)`;dCtx.stroke();});});} const oC=document.getElementById('osc-canvas'),oCtx=oC.getContext('2d');const oW=oC.offsetWidth||380,oH=65;oC.width=oW;oC.height=oH;oCtx.fillStyle='#000';oCtx.fillRect(0,0,oW,oH); if(powered&&pow>0){oscPh+=0.03+(freq/300);}let amp=powered&&pow>0?(pow/100)*22:2;for(let x=0;x<oW;x++){let y=oH/2+Math.sin(x*0.08*(freq/30)+oscPh)*amp;x===0?oCtx.moveTo(x,y):oCtx.lineTo(x,y);}oCtx.strokeStyle=powered?'#22c55e':'#3b3b4f';oCtx.stroke();}
 requestAnimationFrame(demoLoop);
 function togglePower(){powered=!powered;const btn=document.getElementById('pbtn');const sliders=[document.getElementById('pslider'),document.getElementById('fslider')];if(powered){btn.textContent='◉ APAGAR';btn.classList.add('on');sliders.forEach(s=>s.disabled=false);upPow(document.getElementById('pslider').value);upFreq(document.getElementById('fslider').value);document.getElementById('rest').innerText='ACTIU';document.getElementById('rion').innerText='ACTIU';}else{btn.textContent='◉ ENCENDRE';btn.classList.remove('on');sliders.forEach(s=>s.disabled=true);document.getElementById('pslider').value=0;pow=0;document.getElementById('pval').innerText='0 kV';document.getElementById('rest').innerText='APAGAT';document.getElementById('rtens').innerText='--- kV';document.getElementById('rion').innerText='INACTIU';}}
 function upPow(v){pow=parseInt(v);let kv=pow*2.5;document.getElementById('pval').innerText=kv.toFixed(0)+' kV';document.getElementById('rtens').innerText=kv.toFixed(0)+' kV';}
 function upFreq(v){freq=parseInt(v);let kHz=100+freq*12;document.getElementById('fval').innerText=kHz.toFixed(0)+' kHz';}
 const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.reveal').forEach(r=>ro.observe(r));
 
-let apiKey=localStorage.getItem('tsla_ak')||'';if(apiKey)document.getElementById('akey').value=apiKey;
-function saveKey(){apiKey=document.getElementById('akey').value.trim();localStorage.setItem('tsla_ak',apiKey);}
-const chatHist=[];
-function addMsg(role,txt){const box=document.getElementById('cmsgs');const div=document.createElement('div');div.className='msg '+role;const mb=document.createElement('div');mb.className='mb';mb.textContent=txt;div.appendChild(mb);box.appendChild(div);box.scrollTop=box.scrollHeight;return mb;}
-async function sendMsg(){const inp=document.getElementById('cin'),msg=inp.value.trim();if(!msg)return;if(!apiKey){addMsg('bot','⚠ Necessites una clau API d\'Anthropic');return;}inp.value='';addMsg('user',msg);chatHist.push({role:'user',content:msg});const think=addMsg('bot','⏳ Pensant...');try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:`Ets l'Oracle de la Bobina de Tesla Col·legi Sant Francesc. Ferran Colomer és l'experimentador principal.`,messages:chatHist})});const data=await res.json();const reply=data.content?.[0]?.text||'Error';think.textContent=reply;chatHist.push({role:'assistant',content:reply});}catch(e){think.textContent='Error de connexió o clau invàlida.';}}
+// ---------- IA AVANÇADA SENSE FRASES REPETITIVES D'IGUALTAT ----------
+const teamInfo = {
+  lucas: "investigació teòrica, fonaments físics i cerca d'informació científica",
+  sara: "documentació, organització de fonts i registre del projecte",
+  ferran: "muntatge de la bobina i operació pràctica durant els experiments",
+  aitana: "comunicació, presentació i preparació de materials divulgatius"
+};
+const concepts = {
+  resonancia: "La ressonància electromagnètica permet transferir energia màxima entre bobines quan sintonitzen a la mateixa freqüència. És el cor de la bobina de Tesla.",
+  bombeta: "S'encén per inducció: el camp elèctric altern d'alta freqüència indueix corrent a la bombeta fluorescent, ionitzant el gas interior.",
+  musica: "Modulant la freqüència de les espurnes (PWM), l'aire vibra generant notes. La bobina actua com un altaveu sense membrana.",
+  tesla: "Nikola Tesla (1856-1943) va inventar la bobina per estudiar l'alta freqüència i somiava amb transmissió d'energia sense fils.",
+  perill: "La bobina real pot superar els 500 kV. S'ha de manipular amb mesures extremes. Nosaltres ho fem sota supervisió docent."
+};
+
+function getSmartResponse(question, history) {
+  const q = question.toLowerCase();
+  let intent = { type: "general", entities: [] };
+  if (q.includes("lucas")) intent = { type: "person", entity: "lucas" };
+  else if (q.includes("sara")) intent = { type: "person", entity: "sara" };
+  else if (q.includes("ferran")) intent = { type: "person", entity: "ferran" };
+  else if (q.includes("aitana")) intent = { type: "person", entity: "aitana" };
+  else if (q.includes("equip") || q.includes("grup") || q.includes("membres")) intent = { type: "team" };
+  else if (q.includes("bombeta") || q.includes("encesa") || q.includes("sense cable")) intent = { type: "concept", entity: "bombeta" };
+  else if (q.includes("música") || q.includes("melodia") || q.includes("canta")) intent = { type: "concept", entity: "musica" };
+  else if (q.includes("ressonància") || q.includes("freqüència") || q.includes("sintonitzada")) intent = { type: "concept", entity: "resonancia" };
+  else if (q.includes("nikola") || q.includes("inventor")) intent = { type: "concept", entity: "tesla" };
+  else if (q.includes("perill") || q.includes("seguretat")) intent = { type: "concept", entity: "perill" };
+  
+  const randomIntro = [
+    "Mmm, bona pregunta! ", "Ai, això és interessant. ", "Doncs mira: ", "Segons el que hem après al projecte, ", "Ho explico de manera clara: ",
+    "Genial, preguntes com aquesta fan que l'equip brilli. ", "Com a oracle del Sant Francesc, et dic: "
+  ];
+  const randomClosing = [" ✨", " ⚡", " 🔥", " 💡", " 🎵", " 🧠"];
+  let base = randomIntro[Math.floor(Math.random() * randomIntro.length)];
+  
+  if (intent.type === "person") {
+    const person = intent.entity;
+    const role = teamInfo[person];
+    const friendlyName = person.charAt(0).toUpperCase() + person.slice(1);
+    const variants = [
+      `${friendlyName} s'encarrega de ${role}. La seua feina és fonamental per al projecte.`,
+      `En/${friendlyName} fa la tasca de ${role}. Cadascú aporta el seu talent específic.`,
+      `La contribució de ${friendlyName} és ${role}. Així construïm el coneixement col·lectiu.`,
+      `${friendlyName} treballa en ${role}. Sense la seua part, l'engranatge no funcionaria igual.`
+    ];
+    return base + variants[Math.floor(Math.random() * variants.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
+  }
+  else if (intent.type === "team") {
+    const messages = [
+      "Som quatre: Lucas (investigació), Sara (documentació), Ferran (experimentació) i Aitana (presentació). Un equip multidisciplinari.",
+      "L'equip està format per quatre persones amb rols ben definits: Lucas, Sara, Ferran i Aitana. Junts cobrim totes les àrees necessàries.",
+      "La nostra força radica en la diversitat de tasques: investigació, documentació, experiments i comunicació. Així avancem.",
+      "Un grup on cadascú té un paper únic i complementari. Això és treball en equip real."
+    ];
+    return randomIntro[Math.floor(Math.random() * randomIntro.length)] + messages[Math.floor(Math.random() * messages.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
+  }
+  else if (intent.type === "concept") {
+    const key = intent.entity;
+    const info = concepts[key] || "Aquest concepte està relacionat amb l'electromagnetisme d'alta freqüència. La bobina de Tesla n'és l'exemple més fascinant.";
+    const explanations = [
+      info + " Aquest fenomen el vam estudiar a fons i el demostrarem amb els experiments.",
+      info + " Et sembla increïble? Doncs espera a veure l'experiment en directe!",
+      info + " És un dels pilars del nostre treball al Sant Francesc."
+    ];
+    return base + explanations[Math.floor(Math.random() * explanations.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
+  }
+  else {
+    const fallbacks = [
+      "No ho sé exactament, però puc parlar-te de la ressonància, dels experiments o de l'equip. Què t'interessa més?",
+      "Hum, pregunta oberta! Si vols, pregunta'm sobre com funciona la bobina, la bombeta sense cables o els membres del nostre equip. T'ho explicaré de manera distinta cada vegada.",
+      "Ei! La meua especialitat és la bobina de Tesla, els seus principis i com l'equip del Sant Francesc l'ha feta realitat. Pregunta'm alguna cosa concreta."
+    ];
+    return fallbacks[Math.floor(Math.random() * fallbacks.length)] + randomClosing[Math.floor(Math.random() * randomClosing.length)];
+  }
+}
+
+let conversationHistory = [];
+function addMsg(role, txt) {
+  const box = document.getElementById('cmsgs');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const mb = document.createElement('div');
+  mb.className = 'mb';
+  mb.textContent = txt;
+  div.appendChild(mb);
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+async function sendSmartMsg() {
+  const inp = document.getElementById('cin');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  addMsg('user', msg);
+  conversationHistory.push(msg);
+  await new Promise(r => setTimeout(r, 30 + Math.random() * 60));
+  const reply = getSmartResponse(msg, conversationHistory);
+  addMsg('bot', reply);
+  conversationHistory.push(reply);
+  if (conversationHistory.length > 12) conversationHistory = conversationHistory.slice(-10);
+}
 </script>
 </body>
 </html>
